@@ -6,19 +6,26 @@
  * and open the template in the editor.
  */
 namespace Rastija\Resource;
-use Rastija\Service;
+use Rastija\Owl;
+
 /**
  * Description of LkiMainCard
  *
  * @author Virginijus
  */
-class LkiMainCard  implements \DictionaryInterface {
-    
-    private $_resourceId = 'LKIKartoteka/1';
-    private $_resourceName = 'Pagrindinė kartoteka';
+class LkiMainCard extends DictionaryAbstract
+{   
     private $_resourceLmfName = '&j.1;kartoteka.Pagrindinė_kartoteka'; //.Resource
     private $_cacheDir = 'cache/LKI_MAIN_CARD/';
     private $_ontologyFile = 'config/rastija_owl_v3_2015_07_30VM.owl';
+    
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->setResourceId('LKIKartoteka/1');
+        $this->setResourceName('Pagrindinė kartoteka');
+    }
     
     
     /**
@@ -29,13 +36,13 @@ class LkiMainCard  implements \DictionaryInterface {
     public function generateLmfOwl() {
         $test = true;
         if ($test) {
-            $filename  = $this->_cacheDir . md5($this->_resourceId) . '_2.txt';
-            $fileOfIndividuals = $this->_cacheDir . md5($this->_resourceId) . '_individuals_1' . '.owl';
-            $resourceOwlFile = $this->_cacheDir . md5($this->_resourceId) . '_ontology_1' . '.owl';
+            $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_2.txt';
+            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.owl';
+            $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology_1' . '.owl';
         } else {
-            $filename  = $this->_cacheDir . md5($this->_resourceId) . '.txt';
-            $fileOfIndividuals = $this->_cacheDir . md5($this->_resourceId) . '_individuals' . '.owl';
-            $resourceOwlFile = $this->_cacheDir . md5($this->_resourceId) . '_ontology' . '.owl';
+            $filename  = $this->_cacheDir . md5($this->getResourceId()) . '.txt';
+            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals' . '.owl';
+            $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology' . '.owl';
         }
         // Get resource information from the service
         //$resource = new Service\LkiisResource($this->_resourceId);
@@ -51,19 +58,10 @@ class LkiMainCard  implements \DictionaryInterface {
         
         return md5($this->_resourceId);
     }
-
-    public function setResourceId($resourceId) {
-        
-    }
-
-    public function setResourceName($resourceName) {
-        
-    }
-
     
     private function _buildLmfIndividuals($filename, $fileOfIndividuals)
     {
-        $resourceName = $this->_resourceName;
+        $resourceName = $this->getResourceName();
                 
         $file = fopen($filename, 'r');
         $xml = fread($file, filesize($filename));
@@ -183,26 +181,6 @@ class LkiMainCard  implements \DictionaryInterface {
                 }               
             }
             $recordNr++;
-        
-
-print_r($arr);
-echo $recordNr;
-
-
-                /*
-                if ($node->nodeName == 'id') {
-                    $arr[$node->nodeName] = $node->nodeValue;
-                }
-                // remove nodes with status -1
-                if ($node->nodeName == 'status') {
-                    if ($node->nodeValue == '-1') {
-                       // unset($arr[$recordNr]);
-                        //$recordNr--;
-                        //continue;
-                    }
-                }
-                */
-
 
             // Concert the array to lexical entry
             /* array contains all atributes of data structure
@@ -212,7 +190,15 @@ echo $recordNr;
              * - metadata
              *      * all feeld of data structure with is presented upper
              */
-            
+
+            if ($arr['status'] != '-1' && !empty($arr['metadata']['word'])) {
+                $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
+                $lexicalEntry->setSeed($arr['id']);
+                $lexicalEntry->setLemma($arr['metadata']['word']);
+                
+                
+                fwrite($fileIndividuals, $lexicalEntry->toLmfString());
+            }
         }
         fclose($fileIndividuals);
     }
