@@ -98,7 +98,8 @@ class LmfLexicalEntry {
     
     public function getLexicalEntryUri()
     {
-        return $this->getUriBase() . '.' . $this->_fixUri($this->_name) . '.LexicalEntry';
+        return $this->getUriBase() . '.' . $this->_fixUri($this->_name) 
+                . '.LexicalEntry-' . md5('LexicalEntry-' . $this->getLemmaWrittenForm() . $this->getSeed());
     }
     
     public function getLemmaUri() {
