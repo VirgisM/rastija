@@ -15,24 +15,27 @@ use Rastija\Service;
  *
  * @author Virginijus
  */
-class EnLtDictionary implements \DictionaryInterface
+class EnLtDictionary extends DictionaryAbstract
 {
-    private $_resourceId = 'VU/10485716';
-    private $_resourceName = 'Anglų-Lietuvių kalbų žodynas';
     private $_resourceLmfName = '&j.1;zodynas.Anglų-Lietuvių_kalbų_žodynas'; //.Resource
     private $_cacheDir = 'cache/VU_EN-LT/';
     private $_ontologyFile = 'config/rastija_owl_v3_2015_07_30VM.owl';
 
+    public function __construct() {
+        $this->setResourceId('VU/10485716');
+        $this->setResourceName('Anglų-Lietuvių kalbų žodynas');
+    }
+    
     public function generateLmfOwl() {
         $test = false;
         if ($test) {
-            $filename  = $this->_cacheDir . md5($this->_resourceId) . '_1.txt';
-            $fileOfIndividuals = $this->_cacheDir . md5($this->_resourceId) . '_individuals_1' . '.owl';
-            $resourceOwlFile = $this->_cacheDir . md5($this->_resourceId) . '_ontology_1' . '.owl';
+            $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_1.txt';
+            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.owl';
+            $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology_1' . '.owl';
         } else {
-            $filename  = $this->_cacheDir . md5($this->_resourceId) . '.txt';
-            $fileOfIndividuals = $this->_cacheDir . md5($this->_resourceId) . '_individuals' . '.owl';
-            $resourceOwlFile = $this->_cacheDir . md5($this->_resourceId) . '_ontology' . '.owl';
+            $filename  = $this->_cacheDir . md5($this->getResourceId()) . '.txt';
+            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals' . '.owl';
+            $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology' . '.owl';
         }
         // Get resource information from the service
         //$resource = new Service\LkiisResource($this->_resourceId);
@@ -57,7 +60,7 @@ class EnLtDictionary implements \DictionaryInterface
     
     private function _buildLmfIndividuals($filename, $fileOfIndividuals)
     {
-        $resourceName = $this->_resourceName;
+        $resourceName = $this->getResourceName();
                 
         $file = fopen($filename, 'r');
         $xml = fread($file, filesize($filename));
@@ -143,8 +146,8 @@ class EnLtDictionary implements \DictionaryInterface
              *      - (attr: imageURL)
              *      - (attr: sourceLink)
              *      - (attr: 
-             *      - pronunciation () - nepridėta
-             *      - wordForms  - nepridėta
+             *      - pronunciation () - TODO
+             *      - wordForms        - TODO
              *      - senses
              *          - partOfSpeach
              *          - equivalent
