@@ -14,81 +14,55 @@ namespace Rastija\Owl;
  *
  * @author Virginijus
  */
-class LmfWordForm implements LmfClassInterface {
+class LmfWordForm extends LmfFormAbstract implements LmfClassInterface
+{
+    /**
+     * Base uri. It is required for wordForm uri generation.
+     * 
+     * @var string
+     */
+    private $_uriBase;
     
     /**
-     * Accentuaion of 
+     * WordForm uri
      * @var string 
      */
-    private $_accentuation;
+    private $_uri;    
     
-    /**
-     * Image 
-     * 
-     * @var string uri of image location 
-     */
-    private $_image;
-    
-    /**
-     * Sound
-     * 
-     * @var type 
-     */
-    private $_sound;
-    
-    /**
-     * Accentuation setter
-     * 
-     * @param string $acc
-     */
-    public function setAccentuation($acc) {
-        $this->_accentuation = $acc;
+    public function setUri($uri)
+    {
+        $this->_uri = $uri;
     }
     
-    /**
-     * Accentuation getter
-     * 
-     * @return string
-     */
-    public function getAccentuation(){
-        return $this->_accentuation;
-    }
-    
-    /**
-     * Image setter
-     * 
-     * @param string $imageUri link to image file
-     */
-    public function setImage($imageUri) {
-        $this->_image = htmlentities($imageUri);
-    }
-    
-    /**
-     * Image getter
-     * 
-     * @retun string
-     */
-    public function getImage() {
-        return $this->_image;
-    }
-    
-    /**
-     * Sound setter
-     * 
-     * @param string $soundUri link to sound file
-     */
-    public function setSound($soundUri) {
-        $this->_sound = htmlentities($soundUri);
+    public function getUri()
+    {
+        // Generate uri
+        if (!$this->_uri && $this->getWrittenForm()) {
+            $this->_uri = $this->getUriBase() . '.' . $this->_fixUri($this->getWrittenForm()) . '.WordForm-' . md5('WordForm-' . $this->getWrittenForm(). $this->getRank()); 
+        }
+        return $this->_uri;
     }
 
     /**
+     * Function will remove unallowed simbols from uri
      * 
-     * @return string ling to sound file
+     * @param string $uri
      */
-    public function getSound() {
-        return $this->_sound;
+    private function _fixUri($uri)
+    {
+        return preg_replace('/[\[\]\{\}\<\>\'\"\&\s\t\n]/i', '_', $uri);
     }
     
+    public function setUriBase($uriBase)
+    {
+        $this->_uriBase = $uriBase;
+    }
+    
+    public function getUriBase()
+    {
+        return $this->_uriBase;
+    }
+
     /**
      * {@inheritdoc}
      */

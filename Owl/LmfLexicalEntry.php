@@ -13,8 +13,8 @@ namespace Rastija\Owl;
  *
  * @author Virginijus
  */
-class LmfLexicalEntry {
-    
+class LmfLexicalEntry implements LmfClassInterface
+{
     /**
      *
      * @var string 
@@ -184,5 +184,4 @@ class LmfLexicalEntry {
         
         return $str;
     }
-    
 }

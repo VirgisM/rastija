@@ -51,7 +51,7 @@ class LkiMainCard extends DictionaryAbstract
         // Build individal for LMF ontology
         $this->_buildLmfIndividuals($filename, $fileOfIndividuals);
         
-        return 1;
+        return 'a';
         
         // Make owl of dictionary
         //$this->_createOwl($fileOfIndividuals, $resourceOwlFile);
@@ -200,6 +200,7 @@ class LkiMainCard extends DictionaryAbstract
                 fwrite($fileIndividuals, $lexicalEntry->toLmfString());
             }
         }
+        echo 'aaaaaaaa';
         fclose($fileIndividuals);
     }
     
