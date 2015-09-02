@@ -11,7 +11,7 @@ namespace Rastija\Resource;
  *
  * @author Virginijus
  */
-abstract class DictionaryAbstract implements DictionaryInterface {
+abstract class AbstractDictionary implements DictionaryInterface {
     private $_resourceId;
     private $_resourceName;
     

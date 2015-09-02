@@ -15,9 +15,8 @@ namespace Rastija\Owl;
  *
  * @author Virginijus
  */
-abstract class LmfFormAbstract 
+abstract class AbstractLmfForm
 {
-    
     private $grammaticalCase;
     
     private $gramamticalGender;
