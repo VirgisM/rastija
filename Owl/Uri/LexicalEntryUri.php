@@ -11,7 +11,7 @@ namespace Rastija\Owl\Uri;
  *
  * @author Virginijus
  */
-class LemmaUri extends AbstractUri
+class LexicalEntryUri extends AbstractUri
 {
     
     /**
@@ -22,7 +22,7 @@ class LemmaUri extends AbstractUri
         $seed = $options['seed'];
         
         $uri = $this->getUriBase() . '.' . $this->fixUri($writtenForm) 
-                . '.Lemma-' . md5('Lemma-' . $writtenForm . $seed);
+                . '.LexicalEntry-' . md5('LexicalEntry-' . $writtenForm . $seed);
         
         $this->setUri($uri);
         

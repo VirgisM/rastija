@@ -11,7 +11,8 @@ namespace Rastija\Owl\Uri;
  *
  * @author Virginijus
  */
-interface UriFactoryInterface {
+interface UriFactoryInterface
+{
     
     /**
      * Function to create Uri object

@@ -12,8 +12,8 @@ namespace Rastija\Owl\Uri;
  *
  * @author Virginijus
  */
-class UriFactory implements UriFactoryInterface {
-    
+class UriFactory implements UriFactoryInterface
+{
     /**
      * Base uri. It is required for uri generation.
      * 
@@ -34,7 +34,6 @@ class UriFactory implements UriFactoryInterface {
                     'writtenForm' => $writtenForm,
                     'seed' => $seed,
                 ));
-                return $uri;
                 break;
             case 'lemma' :
                 $uri = new LemmaUri();
@@ -43,12 +42,19 @@ class UriFactory implements UriFactoryInterface {
                     'writtenForm' => $writtenForm,
                     'seed' => $seed,
                 ));
-                return $uri;
                 break;            
             default:
                 return;
+                $uri = new DefaultClassUri();
+                $uri->setUriBase($this->getUriBase());
+                $uri->buildUri(array(
+                    'className' => $class,
+                    'writtenForm' => $writtenForm,
+                    'seed' => $seed,
+                ));
                 break;
         }
+        return $uri;
     }
 /**
      * {@inheritdoc}

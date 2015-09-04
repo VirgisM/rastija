@@ -11,18 +11,19 @@ namespace Rastija\Owl\Uri;
  *
  * @author Virginijus
  */
-class LemmaUri extends AbstractUri
+class DefaultClassUri extends AbstractUri
 {
     
     /**
      * {@inheritdoc}
      */
     public function buildUri($options) {
+        $className = $options['className'];
         $writtenForm = $options['writtenForm'];
         $seed = $options['seed'];
         
         $uri = $this->getUriBase() . '.' . $this->fixUri($writtenForm) 
-                . '.Lemma-' . md5('Lemma-' . $writtenForm . $seed);
+                . ".{$className}-" . md5("{$className}-" . $writtenForm . $seed);
         
         $this->setUri($uri);
         

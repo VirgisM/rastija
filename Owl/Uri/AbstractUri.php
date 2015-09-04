@@ -11,7 +11,8 @@ namespace Rastija\Owl\Uri;
  *
  * @author Virginijus
  */
-abstract class AbstractUri {
+abstract class AbstractUri
+{
     /**
      * Base uri. It is required for wordForm uri generation.
      * 

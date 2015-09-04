@@ -6,6 +6,7 @@
  * and open the template in the editor.
  */
 namespace Rastija\Owl;
+use Rastija\Owl\Uri\AbstractUri;
 
 /**
  * Description of LmfClassInterface
@@ -18,4 +19,19 @@ interface LmfClassInterface {
      * Class will be converted to LMF OWL string
      */
     public function toLmfString();
+    
+    
+    /**
+     * Get clas uri
+     *
+     * @return AbstractUri object
+     */
+    public function getUri();
+    
+    /**
+     * Set class uri
+     * 
+     * @param Rastija\Owl\Uri\AbstractUri $uri
+     */
+    public function setUri(AbstractUri $uri);
 }
