@@ -5,13 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+namespace Rastija\Owl\Uri;
 /**
  * Description of UriAbstract
  *
  * @author Virginijus
  */
-abstract class UriAbstract {
+abstract class AbstractUri {
     /**
      * Base uri. It is required for wordForm uri generation.
      * 
@@ -28,24 +28,25 @@ abstract class UriAbstract {
     /**
      * Uri setter
      * 
-     * @param type $uri
+     * @param string $uri
      */
-    public function setUri($uri)
-    {
+    public function setUri($uri) {
         $this->uri = $uri;
     }
     
     /**
      * Uri getter
      */
-    public function getUri();
+    public function getUri() {
+        return $this->uri;
+    }
     
     /**
      * Function will remove unallowed simbols from uri
      * 
      * @param string $uri
      */
-    private function fixUri($uri)
+    protected function fixUri($uri)
     {
         return preg_replace('/[\[\]\{\}\<\>\'\"\&\s\t\n]/i', '_', $uri);
     }
@@ -59,4 +60,11 @@ abstract class UriAbstract {
     {
         return $this->uriBase;
     }
+    
+    /**
+     * Build an unique uri based on option
+     * 
+     * @param array $options Building options
+     */
+    abstract public function buildUri($options);
 }
