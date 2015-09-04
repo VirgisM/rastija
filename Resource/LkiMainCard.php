@@ -13,7 +13,7 @@ use Rastija\Owl;
  *
  * @author Virginijus
  */
-class LkiMainCard extends DictionaryAbstract
+class LkiMainCard extends AbstractDictionary
 {   
     private $_resourceLmfName = '&j.1;kartoteka.Pagrindinė_kartoteka'; //.Resource
     private $_cacheDir = 'cache/LKI_MAIN_CARD/';

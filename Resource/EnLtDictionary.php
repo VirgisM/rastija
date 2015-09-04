@@ -15,7 +15,7 @@ use Rastija\Service;
  *
  * @author Virginijus
  */
-class EnLtDictionary extends DictionaryAbstract
+class EnLtDictionary extends AbstractDictionary
 {
     private $_resourceLmfName = '&j.1;zodynas.Anglų-Lietuvių_kalbų_žodynas'; //.Resource
     private $_cacheDir = 'cache/VU_EN-LT/';
