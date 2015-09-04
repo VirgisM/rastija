@@ -6,31 +6,70 @@
  * and open the template in the editor.
  */
 namespace Rastija\Resource;
+use Rastija\Owl\Uri\UriFactory;
+
 /**
  * Description of DictionaryAbstract
  *
  * @author Virginijus
  */
 abstract class AbstractDictionary implements DictionaryInterface {
-    private $_resourceId;
-    private $_resourceName;
+    /**
+     * Resource ID
+     * 
+     * @var string
+     */
+    private $resourceId;
+    
+    /**
+     * Resource name
+     * 
+     * @var string
+     */
+    private $resourceName;
+    
+    /**
+     * Uri factory for class uri generation
+     * 
+     * @var Rastija\Owl\Uri\UriFactory 
+     */    
+    private $uriFactory;
     
     abstract public function generateLmfOwl();
     
 
+    /**
+     * {@inheritdoc}
+     */
     public function setResourceId($resourceId) {
-        $this->_resourceId = $resourceId;
+        $this->resourceId = $resourceId;
     }
     
     public function getResourceId() {
-        return $this->_resourceId;
+        return $this->resourceId;
     }
 
+    /**
+     * {@inheritdoc}
+     */    
     public function setResourceName($resourceName) {
-        $this->_resourceName = $resourceName;
+        $this->resourceName = $resourceName;
     }
     
     public function getResourceName() {
-        return $this->_resourceName;
+        return $this->resourceName;
+    }
+    
+    /**
+     * Uri factory getter
+     * 
+     * @return Rastija\Owl\Uri\UriFactory
+     */
+    public function getUriFactory() {
+        return $this->uriFactory;
+    }
+
+    public function setUriFactory(UriFactory $uriFactory) {
+        $this->uriFactory = $uriFactory;
     }
 }
