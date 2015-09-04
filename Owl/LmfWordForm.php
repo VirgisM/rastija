@@ -14,7 +14,7 @@ namespace Rastija\Owl;
  *
  * @author Virginijus
  */
-class LmfWordForm extends LmfFormAbstract implements LmfClassInterface
+class LmfWordForm extends AbstractLmfForm implements LmfClassInterface
 {
     /**
      * Base uri. It is required for wordForm uri generation.

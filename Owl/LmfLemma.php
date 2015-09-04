@@ -12,7 +12,7 @@ use Rastija\Owl\Uri;
  *
  * @author Virginijus
  */
-class LmfLemma extends LmfFormAbstract implements LmfClassInterface 
+class LmfLemma extends AbstractLmfForm implements LmfClassInterface 
 {
     
     
