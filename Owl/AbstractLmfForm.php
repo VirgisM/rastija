@@ -19,7 +19,7 @@ abstract class AbstractLmfForm
 {
     private $grammaticalCase;
     
-    private $gramamticalGender;
+    private $grammaticalGender;
     
     private $grammaticalGrade;
     
@@ -71,8 +71,8 @@ abstract class AbstractLmfForm
         return $this->grammaticalCase;
     }
 
-    public function getGramamticalGender() {
-        return $this->gramamticalGender;
+    public function getGrammaticalGender() {
+        return $this->grammaticalGender;
     }
 
     public function getGrammaticalGrade() {
@@ -111,8 +111,8 @@ abstract class AbstractLmfForm
         $this->grammaticalCase = $grammaticalCase;
     }
 
-    public function setGramamticalGender($gramamticalGender) {
-        $this->gramamticalGender = $gramamticalGender;
+    public function setGrammaticalGender($grammaticalGender) {
+        $this->grammaticalGender = $grammaticalGender;
     }
 
     public function setGrammaticalGrade($grammaticalGrade) {
