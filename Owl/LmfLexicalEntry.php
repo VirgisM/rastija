@@ -7,7 +7,7 @@
  */
 
 namespace Rastija\Owl;
-
+use Rastija\Owl\Uri\AbstractUri;
 /**
  * Description of LmfLemma
  *
@@ -15,29 +15,41 @@ namespace Rastija\Owl;
  */
 class LmfLexicalEntry implements LmfClassInterface
 {
+
     /**
      *
      * @var string 
      */
     private $_partOfSpeech;
     
-    private $_resourceName;
-    private $_lexicon;
-    private $_name;
-    private $_lemma;
-    private $_seed = "some seed";
-    private $_lmfNs = "&lmf;";
-    private $_resourceNs = "http://www.rastija.lt/isteklius";
-    
-    private $_nextSenseRank = 0;
     /**
      *
      * @var array of LmfSense's 
      */
-    private $_senses = array();
+    private $senses = array();
     
+    /**
+     * Lemma  of the lexical entry
+     * 
+     * @var LmfLemma 
+     */
+    private $lemma;
+  
+    /* ------------------------ Not LMF ontology parameters ------------------*/
+    
+    private $_resourceNs = "http://www.rastija.lt/isteklius";
+    
+    private $resourceName;
+
+    private $_nextSenseRank = 0;
+
     public function __construct($resourceName) {
-        $this->_resourceName = preg_replace('/\ /', '_', $resourceName);
+        $this->setResource($resourceName);
+    }
+     
+    public function getPartOfSpeech()
+    {
+        return $this->_partOfSpeech;
     }
     
     /**
@@ -48,69 +60,76 @@ class LmfLexicalEntry implements LmfClassInterface
     {
         $this->_partOfSpeech = $partOfSpeech;
     }
-    
-    public function getPartOfSpeech()
-    {
-        return $this->_partOfSpeech;
-    }
-    
+
     public function getResource() {
-        return $this->_resourceName;
-    }
-    
-    public function setLexicon($lexicon) {
-        $this->_lexicon = $lexicon;
-    }
-    
-    public function setSeed($seed) {
-        $this->_seed  = $seed;
+        return $this->resourceName;
     }
 
-    public function getSeed() {
-        return $this->_seed;
+    public function setResource($resourceName) {
+        $this->resourceName = preg_replace('/\ /', '_', $resourceName);
     }
     
-    public function setName($name) {
-        $this->_name = preg_replace('/\ /', '_', strtolower($name));
+    /**
+     * LexicalEntry class Uri 
+     * 
+     * @var AbstractUri
+     */
+    private $lexicalEntryUri;
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getUri() {
+        return $this->lexicalEntryUri->getUri();
     }
     
-    public function setLemma($lemma) {
-        if (!$this->_name) {
-            $this->setName($lemma);
-        }
-        $this->_lemma = $lemma;
-    }
+    /**
+     * {@inheritdoc}
+     */    
+    public function setUri(AbstractUri $uri) {
+        $this->lexicalEntryUri = $uri;
+    }  
     
+    /**
+     * Set Lemma
+     * Equivalent to hasLemma
+     * 
+     * @param LmfLemma $lemma
+     */
+    public function setLemma(LmfLemma $lemma) {
+        $this->lemma = $lemma;
+    }
+
+    /**
+     * Get Lemma
+     * 
+     * @return LmfLemma 
+     */
     public function getLemma()
     {
-        return $this->_lemma;
+        return $this->lemma;
     }
     
-    public function getLemmaWrittenForm() 
+    /**
+     * Function will remove unallowed simbols from uri
+     * 
+     * @todo Need to remove this function
+     * @param string $uri
+     */
+    private function fixUri($uri)
     {
-        return $this->_lemma;
-    }
-
-    public function getUriBase()
-    {
-        return $this->_lmfNs . $this->_fixUri($this->getResource());
-    }
-    
-    public function getLexicalEntryUri()
-    {
-        return $this->getUriBase() . '.' . $this->_fixUri($this->_name) 
-                . '.LexicalEntry-' . md5('LexicalEntry-' . $this->getLemmaWrittenForm() . $this->getSeed());
-    }
-    
-    public function getLemmaUri() {
-        return $this->getUriBase() . '.' . $this->_fixUri($this->_lemma) 
-                . '.Lemma-' . md5('Lemma-' . $this->getLemmaWrittenForm() . $this->getSeed());
+        return preg_replace('/[\[\]\{\}\<\>\'\"\&\s\t\n]/i', '_', $uri);
     }
     
     public function getResourceUri() {
-        return $this->_resourceNs . '#zodynas.' . $this->_fixUri($this->getResource()) . '.Resource';
+        return $this->_resourceNs . '#zodynas.' . $this->fixUri($this->getResource()) . '.Resource';
     }
     
+    /**
+     * Equivalent to hasSense property
+     * 
+     * @param \Rastija\Owl\LmfSense $sense
+     */
     public function addSense(LmfSense $sense)
     {
         if ($this->_nextSenseRank < $sense->getRank()) {
@@ -119,28 +138,17 @@ class LmfLexicalEntry implements LmfClassInterface
             $sense->setRank($this->_nextSenseRank);
             $this->_nextSenseRank++;
         }
-        array_push($this->_senses, $sense);
+        array_push($this->senses, $sense);
     }
     
     public function getNextSenseRank() {
         return $this->_nextSenseRank;
     }
-            
-
-    /**
-     * Function will remove unallowed simbols from uri
-     * 
-     * @param string $uri
-     */
-    private function _fixUri($uri)
-    {
-        return preg_replace('/[\[\]\{\}\<\>\'\"\&\s\t\n]/i', '_', $uri);
-    }
-    
+                
     public function toLmfString() {
         
         /* Lexical Entry part */
-        $str = "<owl:NamedIndividual rdf:about=\"{$this->getLexicalEntryUri() }\">\n";
+        $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri() }\">\n";
         $str .= "\t<rdf:type rdf:resource=\"&lmf;LexicalEntry\"/>\n";
         $str .= "\t<j.1:lexicon rdf:resource=\"{$this->getResourceUri() }\"/>\n";
         
@@ -150,34 +158,23 @@ class LmfLexicalEntry implements LmfClassInterface
         }
         
         if ($this->getLemma()) {
-            $str .= "\t<hasLemma rdf:resource=\"{$this->getLemmaUri() }\"/>\n";
-            $str .= "\t<rdfs:label>{$this->getLemmaWrittenForm() }</rdfs:label>\n";
+            $str .= "\t<hasLemma rdf:resource=\"{$this->getLemma()->getUri() }\"/>\n";
+            $str .= "\t<rdfs:label>{$this->getLemma()->getWrittenForm() }</rdfs:label>\n";
         }
         
-        foreach ($this->_senses as $sense) {
+        foreach ($this->senses as $sense) {
             $str .= "\t<hasSense rdf:resource=\"{$sense->getUri() }\"/>\n";
         }
         
         $str .= "</owl:NamedIndividual>\n";
         
-        /* Lemma part */
-        /*
-          <rdf:Description rdf:about="http://www.lexinfo.net/lmf#VU_LatviuLietuviu_zodynas..Lemmada41f9ca-439d-43f4-a20f-321add97889f">
-           <j.0:writtenForm>sēkla</j.0:writtenForm>
-           <rdfs:label>VU_LatviuLietuviu_zodynas..Lemmada41f9ca-439d-43f4-a20f-321add97889f</rdfs:label>
-           <rdf:type rdf:resource="http://www.lexinfo.net/lmf#Lemma"/>
-         </rdf:Description>  
-        */    
+        /* Lemma part */  
         if ($this->getLemma()) {
-           $str .= "<owl:NamedIndividual rdf:about=\"{$this->getLemmaUri()}\">\n";
-           $str .= "\t<writtenForm>{$this->getLemmaWrittenForm() }</writtenForm>\n";
-           $str .= "\t<rdfs:label>{$this->getLemmaWrittenForm() }-Lemma</rdfs:label>\n";
-           $str .= "\t<rdf:type rdf:resource=\"&lmf;Lemma\"/>\n";
-           $str .= "</owl:NamedIndividual>\n";
+            $str .= $this->getLemma()->toLmfString();
         }
         
         /* Senses */
-        foreach ($this->_senses as $sense) {
+        foreach ($this->senses as $sense) {
             /* @var $sense LmfSense */
             $str .= $sense->toLmfString();
         }

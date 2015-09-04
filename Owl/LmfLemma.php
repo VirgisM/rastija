@@ -15,7 +15,7 @@ use Rastija\Owl\Uri\AbstractUri;
 class LmfLemma extends AbstractLmfForm implements LmfClassInterface 
 {
     /**
-     * Lemma uri class
+     * Lemma class uri 
      * 
      * @var AbstractUri
      */

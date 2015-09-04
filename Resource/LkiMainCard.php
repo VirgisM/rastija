@@ -7,6 +7,7 @@
  */
 namespace Rastija\Resource;
 use Rastija\Owl;
+use Rsstija\Owl\Uri;
 
 /**
  * Description of LkiMainCard
@@ -15,7 +16,6 @@ use Rastija\Owl;
  */
 class LkiMainCard extends AbstractDictionary
 {   
-    private $_resourceLmfName = '&j.1;kartoteka.Pagrindinė_kartoteka'; //.Resource
     private $_cacheDir = 'cache/LKI_MAIN_CARD/';
     private $_ontologyFile = 'config/rastija_owl_v3_2015_07_30VM.owl';
     
@@ -25,6 +25,12 @@ class LkiMainCard extends AbstractDictionary
     public function __construct() {
         $this->setResourceId('LKIKartoteka/1');
         $this->setResourceName('Pagrindinė kartoteka');
+        
+        /** @var Uri\AbstractUri $uriFactory */
+        $uriFactory = new Owl\Uri\UriFactory();
+        $uriFactory->setUriBase('&lmf;kartoteka.Pagrindinė_kartoteka');
+        
+        $this->setUriFactory($uriFactory);
     }
     
     
@@ -51,12 +57,11 @@ class LkiMainCard extends AbstractDictionary
         // Build individal for LMF ontology
         $this->_buildLmfIndividuals($filename, $fileOfIndividuals);
         
-        return 'a';
         
         // Make owl of dictionary
         //$this->_createOwl($fileOfIndividuals, $resourceOwlFile);
         
-        return md5($this->_resourceId);
+        return md5($this->getResourceId());
     }
     
     private function _buildLmfIndividuals($filename, $fileOfIndividuals)
@@ -193,9 +198,24 @@ class LkiMainCard extends AbstractDictionary
 
             if ($arr['status'] != '-1' && !empty($arr['metadata']['word'])) {
                 $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
+                $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
+                                $arr['metadata']['word'] . '-' . $arr['metadata']['cardno'], 
+                                $arr['id']));
+                $lmfLemma = new Owl\LmfLemma();
+                $lmfLemma->setWrittenForm($arr['metadata']['word']);
+                $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
+                                $arr['metadata']['word'] . '-' . $arr['metadata']['cardno'], 
+                                $arr['id']));
+                
+                $lexicalEntry->setLemma($lmfLemma);
+                
+                //fwrite($fileIndividuals, $lmfLemma->toLmfString());
+                
+                /*
+                $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
                 $lexicalEntry->setSeed($arr['id']);
                 $lexicalEntry->setLemma($arr['metadata']['word']);
-                
+                */
                 
                 fwrite($fileIndividuals, $lexicalEntry->toLmfString());
             }
