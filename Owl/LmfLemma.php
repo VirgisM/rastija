@@ -86,7 +86,7 @@ class LmfLemma extends AbstractLmfForm
         }
 
         if ($this->getSound()) {
-            $str .= "\t<script>{$this->getSound() }</script>\n";
+            $str .= "\t<sound>{$this->getSound() }</sound>\n";
         }
         
         $str .= "\t<rdfs:label>{$this->getWrittenForm() }-Lemma</rdfs:label>\n";
