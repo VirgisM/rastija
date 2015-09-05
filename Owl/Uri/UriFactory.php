@@ -44,7 +44,6 @@ class UriFactory implements UriFactoryInterface
                 ));
                 break;            
             default:
-                return;
                 $uri = new DefaultClassUri();
                 $uri->setUriBase($this->getUriBase());
                 $uri->buildUri(array(
