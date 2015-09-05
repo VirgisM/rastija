@@ -13,7 +13,7 @@ use Rastija\Owl\Uri\AbstractUri;
  *
  * @author Virginijus
  */
-class LmfLexicalEntry implements LmfClassInterface
+class LmfLexicalEntry extends AbstractLmfClass
 {
 
     /**
@@ -68,27 +68,6 @@ class LmfLexicalEntry implements LmfClassInterface
     public function setResource($resourceName) {
         $this->resourceName = preg_replace('/\ /', '_', $resourceName);
     }
-    
-    /**
-     * LexicalEntry class Uri 
-     * 
-     * @var AbstractUri
-     */
-    private $lexicalEntryUri;
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getUri() {
-        return $this->lexicalEntryUri->getUri();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */    
-    public function setUri(AbstractUri $uri) {
-        $this->lexicalEntryUri = $uri;
-    }  
     
     /**
      * Set Lemma
@@ -149,8 +128,6 @@ class LmfLexicalEntry implements LmfClassInterface
         
         /* Lexical Entry part */
         $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri() }\">\n";
-        $str .= "\t<rdf:type rdf:resource=\"&lmf;LexicalEntry\"/>\n";
-        $str .= "\t<j.1:lexicon rdf:resource=\"{$this->getResourceUri() }\"/>\n";
         
         // <partOfSpeech xml:lang="en">abbr</partOfSpeech>
         if($this->getPartOfSpeech()) {
@@ -166,6 +143,8 @@ class LmfLexicalEntry implements LmfClassInterface
             $str .= "\t<hasSense rdf:resource=\"{$sense->getUri() }\"/>\n";
         }
         
+        $str .= "\t<rdf:type rdf:resource=\"&lmf;LexicalEntry\"/>\n";
+        $str .= "\t<j.1:lexicon rdf:resource=\"{$this->getResourceUri() }\"/>\n";
         $str .= "</owl:NamedIndividual>\n";
         
         /* Lemma part */  

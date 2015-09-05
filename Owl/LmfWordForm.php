@@ -14,55 +14,8 @@ namespace Rastija\Owl;
  *
  * @author Virginijus
  */
-class LmfWordForm extends AbstractLmfForm implements LmfClassInterface
+class LmfWordForm extends AbstractLmfForm
 {
-    /**
-     * Base uri. It is required for wordForm uri generation.
-     * 
-     * @var string
-     */
-    private $_uriBase;
-    
-    /**
-     * WordForm uri
-     * @var string 
-     */
-    private $_uri;    
-    
-    public function setUri($uri)
-    {
-        $this->_uri = $uri;
-    }
-    
-    public function getUri()
-    {
-        // Generate uri
-        if (!$this->_uri && $this->getWrittenForm()) {
-            $this->_uri = $this->getUriBase() . '.' . $this->_fixUri($this->getWrittenForm()) . '.WordForm-' . md5('WordForm-' . $this->getWrittenForm(). $this->getRank()); 
-        }
-        return $this->_uri;
-    }
-
-    /**
-     * Function will remove unallowed simbols from uri
-     * 
-     * @param string $uri
-     */
-    private function _fixUri($uri)
-    {
-        return preg_replace('/[\[\]\{\}\<\>\'\"\&\s\t\n]/i', '_', $uri);
-    }
-    
-    public function setUriBase($uriBase)
-    {
-        $this->_uriBase = $uriBase;
-    }
-    
-    public function getUriBase()
-    {
-        return $this->_uriBase;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -88,11 +41,6 @@ class LmfWordForm extends AbstractLmfForm implements LmfClassInterface
         $str .= "\t<rdf:type rdf:resource=\"&lmf;WordForm\"/>\n";
         $str .= "</owl:NamedIndividual>\n";
         
-        // Equivalents
-        foreach ($this->_equivalents as $equivalent) {
-            /* @var $equivalent LmfEquivalent  */
-            $str .= $equivalent->toLmfString();
-        }
         return $str;        
     }
 }

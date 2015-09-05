@@ -12,29 +12,8 @@ use Rastija\Owl\Uri\AbstractUri;
  *
  * @author Virginijus
  */
-class LmfLemma extends AbstractLmfForm implements LmfClassInterface 
-{
-    /**
-     * Lemma class uri 
-     * 
-     * @var AbstractUri
-     */
-    private $lemmaUri;
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getUri() {
-        return $this->lemmaUri->getUri();
-    }
-    
-    /**
-     * {@inheritdoc}
-     */    
-    public function setUri(AbstractUri $uri) {
-        $this->lemmaUri = $uri;
-    }
-    
+class LmfLemma extends AbstractLmfForm 
+{   
     /**
      * {@inheritdoc}
      */    
