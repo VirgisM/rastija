@@ -55,16 +55,16 @@ class LkiMainCard extends AbstractDictionary
         //$resource->getRecords($filename, 7300);
         
         // Build individal for LMF ontology
-        $this->_buildLmfIndividuals($filename, $fileOfIndividuals);
+        $this->buildLmfIndividuals($filename, $fileOfIndividuals);
         
         
         // Make owl of dictionary
-        //$this->_createOwl($fileOfIndividuals, $resourceOwlFile);
+        $this->createOwl($fileOfIndividuals, $resourceOwlFile);
         
         return md5($this->getResourceId());
     }
     
-    private function _buildLmfIndividuals($filename, $fileOfIndividuals)
+    private function buildLmfIndividuals($filename, $fileOfIndividuals)
     {
         $resourceName = $this->getResourceName();
                 
@@ -88,7 +88,7 @@ class LkiMainCard extends AbstractDictionary
          * metadata
          *  record
          *      writer (4641)                       * Metrika -> Užrašytojai
-         *      imageURLs (48822)                   * Paveikslėkis 126x166
+         *      imageURLs (48822)                   * Paveikslėlis 126x166
          *      sourcelink (27369)                  * Metrika -> Šaltiniai
          *      gramref_header (26)
          *      attributes (num of instances:
@@ -98,7 +98,7 @@ class LkiMainCard extends AbstractDictionary
                     - cardno (48822)                * Kortelės numeris
                     - box (48822)                   - nenaudojamas
                     - images (48822)                - paveiklėlių numeriai
-                    - sourcelocation (16140)        * Vietovė (nurodoma prie šaltinio)
+                    - sourcelocation (16140)        * Metrika->Vietovė (nurodoma prie šaltinio)
                     - word_subtitle (8326)          * Paantraštė ()
                     - note (328)                    * Pastaba
                     - sourceauthor (483)            * Metrika -> Pateikėjas
@@ -207,22 +207,93 @@ class LkiMainCard extends AbstractDictionary
                                 $arr['metadata']['word'] . '-' . $arr['metadata']['cardno'], 
                                 $arr['id']));
                 
+                $lmfLemma->setImage($arr['imageUrl']);
                 $lexicalEntry->setLemma($lmfLemma);
                 
-                //fwrite($fileIndividuals, $lmfLemma->toLmfString());
+                $lmfSense = new Owl\LmfSense();
+                $lmfSense->setLemmaWrittenForm($lmfLemma->getWrittenForm());
+
+                $lmfSense->setUri($this->getUriFactory()->create('Sense', 
+                                $arr['metadata']['word'] . '-' . $arr['metadata']['cardno'], 
+                                $arr['id']));
                 
-                /*
-                $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
-                $lexicalEntry->setSeed($arr['id']);
-                $lexicalEntry->setLemma($arr['metadata']['word']);
-                */
+                $lmfDefintion = new Owl\LmfDefinition();
+                $lmfDefintion->setUri($this->getUriFactory()->create('Definition', 
+                                $arr['metadata']['word'] . '-' . $arr['metadata']['cardno'], 
+                                $arr['id']));
+                
+                $lmfTextRepresentation = new Owl\LmfTextRepresentation();
+                $lmfTextRepresentation ->setUri($this->getUriFactory()->create('TextRepresentation', 
+                                $arr['metadata']['word'] . '-' . $arr['metadata']['cardno'], 
+                                $arr['id']));
+                $writtenForm = "<![CDATA[ <div>Kortelės numeris: {$arr['metadata']['cardno']} </div>";
+                if (!empty($arr['metadata']['sourcelocation'])) {
+                    $writtenForm .= "<strong>Metrika</strong><div>Vietovė: {$arr['metadata']['sourcelocation']} </div>";
+                }
+                $writtenForm .= "]]>";
+                        
+                $lmfTextRepresentation->setWrittenForm($writtenForm);
+                
+                $lmfDefintion->addTextRepresentation($lmfTextRepresentation);
+            
+                $lmfSense->setDefinition($lmfDefintion);
+
+                $lexicalEntry->addSense($lmfSense);
                 
                 fwrite($fileIndividuals, $lexicalEntry->toLmfString());
             }
         }
-        echo 'aaaaaaaa';
         fclose($fileIndividuals);
     }
     
-//put your code here
+    private function createOwl($fileOfIndividuals, $resourceOwlFile)
+    {
+        // Add LMF ontology to file
+        $ontologyFile = $this->_ontologyFile;
+
+        // Read individuals
+        $fileIndividuals = fopen($fileOfIndividuals, "r");
+        $individuals = fread($fileIndividuals, filesize($fileOfIndividuals));
+        fclose($fileIndividuals);    
+
+        // Read ontology
+        $fileLmfOntology = fopen($ontologyFile, "r");
+        $ontology = fread($fileLmfOntology, filesize($ontologyFile));
+        fclose($fileLmfOntology);    
+
+        // Create resource owl
+        $fileResourceOwl = fopen($resourceOwlFile, "w");
+        fwrite($fileResourceOwl, $ontology);
+        fwrite($fileResourceOwl, $individuals);
+        $individuals = NULL;
+        
+        //@TODO fix anotation part
+        $resourceAnnotationStr = "
+        
+            <!-- 
+            ///////////////////////////////////////////////////////////////////////////////////////
+            //
+            // Annotations
+            //
+            ///////////////////////////////////////////////////////////////////////////////////////
+             -->
+<!--
+            <<owl:NamedIndividual rdf:about=\"{$this->getUriFactory()->getUriBase()}.Resource\">
+                <rdfs:label>{$this->getResourceName()}</rdfs:label>
+                <&j.1;hasEdition rdf:resource=\"{$this->getUriFactory()->getUriBase()}}.Edition\" />;
+                <rdf:type rdf:resource=\"&j.1;lexicon\"/>
+            </<owl:NamedIndividual>
+            
+            <<owl:NamedIndividual rdf:about=\"{$this->getUriFactory()->getUriBase()}}.Edition\" >
+                <rdfs:label>{$this->getResourceName()}-Edition</rdfs:label>
+                <&j.1;date>2015</&j.1;date>
+                <rdf:type rdf:resource=\"&j.1;Edition\"/>
+            </<owl:NamedIndividual>
+-->            
+        </rdf:RDF>
+            ";
+        
+        fwrite($fileResourceOwl, $resourceAnnotationStr);
+        fclose($fileResourceOwl);        
+    }
 }
