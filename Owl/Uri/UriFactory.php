@@ -8,7 +8,7 @@
 namespace Rastija\Owl\Uri;
 
 /**
- * Description of UriFactory
+ * Uri generators factory
  *
  * @author Virginijus
  */

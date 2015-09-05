@@ -5,11 +5,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 namespace Rastija\Owl;
 use Rastija\Owl\Uri\AbstractUri;
 
 /**
- * Description of LmfClassInterface
+ * Interface for each LMF class
  *
  * @author Virginijus
  */

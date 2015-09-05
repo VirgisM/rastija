@@ -5,7 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 namespace Rastija\Owl;
+
 /**
  * Form class is an abstract class representing a lexeme, a morphological 
  * variant of a lexeme or a morph. The Form class manages one or more 

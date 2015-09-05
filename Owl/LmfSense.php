@@ -5,10 +5,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 namespace Rastija\Owl;
 use Rastija\Owl\Uri\AbstractUri;
+use Rastija\Owl\LmfDefinition;
+
 /**
- * Description of LmfSense
+ * Sense is a class representing one meaning of a lexical entry. 
+ * The Sense class allows subclasses. The Sense class allows for hierarchical 
+ * senses in that a sense may be more specific than another sense of 
+ * the same lexical entry.
  *
  * @author Virginijus
  */
@@ -22,12 +28,20 @@ class LmfSense extends AbstractLmfClass
     */
       
     /**
-     * LMF equivalent related to this sense
+     * LMF equivalent that is related to this sense
      * (object property hasEquivalent)
      * 
      * @var array of \Rastija\Owl\LmfEquivalent's
      */
-    private $equivalents = array();   
+    private $equivalents = array();
+    
+    /**
+     * LMF definition that is related to this sense
+     *
+     * @var \Rastija\Owl\LmfDefinition
+     */
+    private $definition;
+    
     
     /* ------------------------ Not LMF ontology parameters ------------------*/
     /**
@@ -70,20 +84,32 @@ class LmfSense extends AbstractLmfClass
         array_push($this->equivalents, $equivalent);
     }
     
+    public function getDefinition() {
+        return $this->definition;
+    }
+
+    public function setDefinition(LmfDefinition $definition) {
+        $this->definition = $definition;
+    }
+
     public function toLmfString() {
-/*        
-<owl:NamedIndividual rdf:about="&lmf;Anglų-lietuvių-kalbų-kompiuterijos-žodynas/sign-60egg58hge90c141a55be26aa-sense"> 
-	<rdfs:label>#-sense</rdfs:label> 
-	<rdf:type rdf:resource="&lmf;Sense"/> 
-	<hasEquivalent rdf:resource="&lmf;Anglų-lietuvių-kalbų-kompiuterijos-žodynas/sign-60egg58hge90c141a55be26aa-equivalent-lie-1"/> 
-</owl:NamedIndividual>
- */
+        /*        
+        <owl:NamedIndividual rdf:about="&lmf;Anglų-lietuvių-kalbų-kompiuterijos-žodynas/sign-60egg58hge90c141a55be26aa-sense"> 
+            <rdfs:label>#-sense</rdfs:label> 
+            <rdf:type rdf:resource="&lmf;Sense"/> 
+            <hasEquivalent rdf:resource="&lmf;Anglų-lietuvių-kalbų-kompiuterijos-žodynas/sign-60egg58hge90c141a55be26aa-equivalent-lie-1"/> 
+        </owl:NamedIndividual>
+         */
         $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri()}\">\n";
         $str .= "\t<rank>{$this->getRank()}-Sense</rank>\n";
         $str .= "\t<rdfs:label>{$this->getLemmaWrittenForm()}-Sense</rdfs:label>\n";
         
         foreach ($this->equivalents as $equivalent) {
             $str .= "\t<hasEquivalent rdf:resource=\"{$equivalent->getUri() }\"/>\n";
+        }
+        
+        if ($this->getDefinition()) {
+            $str .= "\t<hasDefinition rdf:resource=\"{$this->getDefinition()->getUri() }\"/>\n";
         }
         
         $str .= "\t<rdf:type rdf:resource=\"&lmf;Sense\"/>\n";
@@ -94,6 +120,12 @@ class LmfSense extends AbstractLmfClass
             /* @var $equivalent LmfEquivalent  */
             $str .= $equivalent->toLmfString();
         }
+        
+        // Definition
+        if ($this->getDefinition()) {
+            $str .= $this->getDefinition()->toLmfString();
+        }
+        
         return $str;
     }
 }

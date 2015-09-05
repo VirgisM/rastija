@@ -5,9 +5,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 namespace Rastija\Owl\Uri;
+
 /**
- * Description of Uri
+ * Lemma Uri generator class
  *
  * @author Virginijus
  */

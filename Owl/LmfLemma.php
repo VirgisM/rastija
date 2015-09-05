@@ -5,10 +5,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 namespace Rastija\Owl;
 use Rastija\Owl\Uri\AbstractUri;
+
 /**
- * Description of LmfLemma
+ * Lemma is a Form subclass representing a word form chosen by convention to 
+ * designate the Lexical Entry. The Lemma class is in a one to one aggregate 
+ * association with the Lexical Entry that overrides the multiplicity inherited 
+ * from the Form class. The lemma is usually equivalent to one of the inflected 
+ * forms, the root or stem, or MWE, e.g. compound, idiomatic phrase. 
+ * The convention for selecting the lemma can vary by language, language family,
+ * or editorial choice.
  *
  * @author Virginijus
  */

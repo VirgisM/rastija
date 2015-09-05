@@ -5,6 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 namespace Rastija\Owl;
 
 /**
@@ -30,10 +31,10 @@ class LmfWordForm extends AbstractLmfForm
          */
         $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri()}\">\n";
         if ($this->getSound()) {
-            $str = "<sound>{$this->getSound()}</sound>\n";
+            $str .= "<sound>{$this->getSound()}</sound>\n";
         }
         if ($this->getAccentuation()) {
-            $str = "<accentuation>{$this->getAccentuation()}</accentuation>\n";
+            $str .= "<accentuation>{$this->getAccentuation()}</accentuation>\n";
         }
         if ($this->getImage()) {
             $str .= "\t<rdfs:label>{$this->getWrittenForm()}-Sense</rdfs:label>\n";

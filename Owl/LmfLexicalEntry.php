@@ -8,8 +8,14 @@
 
 namespace Rastija\Owl;
 use Rastija\Owl\Uri\AbstractUri;
+
 /**
- * Description of LmfLemma
+ * Lexical Entry is a class representing a lexeme in a given language. 
+ * The Lexical Entry is a container for managing the Form and Sense classes. 
+ * Therefore, the Lexical Entry manages the relationship between the forms and 
+ * their related senses. A Lexical Entry instance can contain one to many 
+ * different forms, and can have from zero to many different senses. 
+ * The Lexical Entry class does not allow subclasses.
  *
  * @author Virginijus
  */
@@ -142,9 +148,9 @@ class LmfLexicalEntry extends AbstractLmfClass
         foreach ($this->senses as $sense) {
             $str .= "\t<hasSense rdf:resource=\"{$sense->getUri() }\"/>\n";
         }
-        
-        $str .= "\t<rdf:type rdf:resource=\"&lmf;LexicalEntry\"/>\n";
+
         $str .= "\t<j.1:lexicon rdf:resource=\"{$this->getResourceUri() }\"/>\n";
+        $str .= "\t<rdf:type rdf:resource=\"&lmf;LexicalEntry\"/>\n";
         $str .= "</owl:NamedIndividual>\n";
         
         /* Lemma part */  

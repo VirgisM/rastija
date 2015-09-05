@@ -5,9 +5,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 namespace Rastija\Owl;
+
 /**
- * Description of lmfEquivalent
+ * In a bilingual MRD, the Equivalent class represents the translation 
+ * equivalent of the word form managed by the Lemma class. 
+ * The Equivalent class is in a zero to many aggregate association with 
+ * the Sense class, which allows the lexicon developer to omit the 
+ * Equivalent class from a monolingual dictionary.
  *
  * @author Virginijus
  */

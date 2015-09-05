@@ -8,8 +8,9 @@
 
 namespace Rastija\Owl;
 use Rastija\Owl\Uri\AbstractUri;
+
 /**
- * Description of AbstractLmfClass
+ * Abstract LMF class
  *
  * @author Virginijus
  */
