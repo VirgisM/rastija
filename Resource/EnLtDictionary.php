@@ -42,10 +42,10 @@ class EnLtDictionary extends AbstractDictionary
         //$resource->getRecords($filename, 100);
         
         // Build individal for LMF ontology
-        $this->_buildLmfIndividuals($filename, $fileOfIndividuals);
+        $this->buildLmfIndividuals($filename, $fileOfIndividuals);
         
         // Make owl of dictionary
-        $this->_createOwl($fileOfIndividuals, $resourceOwlFile);
+        $this->createOwl($fileOfIndividuals, $resourceOwlFile);
         
         return md5($this->_resourceId);
     }
@@ -58,7 +58,7 @@ class EnLtDictionary extends AbstractDictionary
         $this->_resourceName = $resourceName;
     }
     
-    private function _buildLmfIndividuals($filename, $fileOfIndividuals)
+    private function buildLmfIndividuals($filename, $fileOfIndividuals)
     {
         $resourceName = $this->getResourceName();
                 
@@ -115,7 +115,7 @@ class EnLtDictionary extends AbstractDictionary
 
                                         // PartOfSpeach
                                         if ($sense->getAttribute('name') == 'KalbosDalis') {
-                                            $senseArr['partOfSpeach'] = $this->_fullAbbreviation($sense->getAttribute('value'));
+                                            $senseArr['partOfSpeach'] = $this->fullAbbreviation($sense->getAttribute('value'));
                                         }
 
                                         // Equivalents
@@ -216,7 +216,7 @@ class EnLtDictionary extends AbstractDictionary
         fclose($fileIndividuals);
     }
 
-    private function _fullAbbreviation($abbr)
+    private function fullAbbreviation($abbr)
     {
         // From http://members.peak.org/~jeremy/dictionaryclassic/chapters/abbreviations.php
         $map = array (
@@ -250,7 +250,7 @@ class EnLtDictionary extends AbstractDictionary
         }
     }
     
-    private function _createOwl($fileOfIndividuals, $resourceOwlFile)
+    private function createOwl($fileOfIndividuals, $resourceOwlFile)
     {
         // Add LMF ontology to file
         $ontologyFile = $this->_ontologyFile;

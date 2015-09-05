@@ -59,17 +59,18 @@ class LmfTextRepresentation extends AbstractRepresentation
         $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri()}\">\n";
         
         if ($this->getOrthographyName()) {
-            $str .= "<orthographyName>{$this->getOrthographyName()}</orthographyName>\n";
+            $str .= "\t<orthographyName>{$this->getOrthographyName()}</orthographyName>\n";
         }
  
         if ($this->getScript()) {
-            $str .= "<script>{$this->getScript()}</script>\n";
+            $str .= "\t<script>{$this->getScript()}</script>\n";
         }
 
         if ($this->getWrittenForm()) {
-            $str .= "<writtenForm>{$this->getWrittenForm()}</writtenForm>\n";
+            $str .= "\t<writtenForm>{$this->getWrittenForm()}</writtenForm>\n";
         }
 
+        $str .= "\t<rdfs:label>{$this->getUri()}</rdfs:label>\n";
         $str .= "\t<rdf:type rdf:resource=\"&lmf;TextRepresentation\"/>\n";
         $str .= "</owl:NamedIndividual>\n";
         

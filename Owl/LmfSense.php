@@ -101,7 +101,7 @@ class LmfSense extends AbstractLmfClass
         </owl:NamedIndividual>
          */
         $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri()}\">\n";
-        $str .= "\t<rank>{$this->getRank()}-Sense</rank>\n";
+        $str .= "\t<rank>{$this->getRank()}</rank>\n";
         $str .= "\t<rdfs:label>{$this->getLemmaWrittenForm()}-Sense</rdfs:label>\n";
         
         foreach ($this->equivalents as $equivalent) {

@@ -214,7 +214,7 @@ abstract class AbstractLmfForm extends AbstractLmfClass
      * @param string $imageUri link to image file
      */
     public function setImage($image) {
-        $this->image = $image;
+        $this->image = urlencode($image);
     }
 
     /**
@@ -223,7 +223,7 @@ abstract class AbstractLmfForm extends AbstractLmfClass
      * @param string $soundUri link to sound file
      */    
     public function setSound($sound) {
-        $this->sound = $sound;
+        $this->sound = urlencode($sound);
     }
     
     

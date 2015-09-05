@@ -55,11 +55,7 @@ class LmfDefinition extends AbstractLmfClass
             $str .= "\t<hasTextRepresentation rdf:resource=\"{$textRepresentation->getUri() }\"/>\n";
         }
         
-        if ($this->getDefinition()) {
-            $str .= "\t<hasDefinition rdf:resource=\"{$this->getDefinition()->getUri() }\"/>\n";
-        }
-        
-        $str .= "\t<rdfs:label>{$this->getLemmaWrittenForm()}-Definition</rdfs:label>\n";
+        $str .= "\t<rdfs:label>{$this->getUri()}</rdfs:label>\n";
         $str .= "\t<rdf:type rdf:resource=\"&lmf;Definition\"/>\n";
         $str .= "</owl:NamedIndividual>\n";
         
