@@ -226,5 +226,77 @@ abstract class AbstractLmfForm extends AbstractLmfClass
         $this->sound = urlencode($sound);
     }
     
-    
+    /**
+     *  All not empty class attributes will be converted to LMF atributes
+     * 
+     * @return string
+     */
+    protected function getAttributesLmfStr() {
+        $str = '';
+        if ($this->getWrittenForm()) {
+            $str .= "\t<writtenForm>{$this->getWrittenForm() }</writtenForm>\n";
+        }
+            
+        if ($this->getAccentuation()) {
+            $str .= "\t<accentuation>{$this->getAccentuation() }</accentuation>\n";
+        }
+        
+        if ($this->getDeclension()) {
+            $str .= "\t<declension>{$this->getDeclension() }</declension>\n";
+        }
+
+        if ($this->getFormula()) {
+            $str .= "\t<formula>{$this->getFormula() }</formula>\n";
+        }
+        
+        if ($this->getGrammaticalCase()) {
+            $str .= "\t<grammaticalCase>{$this->getGrammaticalCase() }</grammaticalCase>\n";
+        }        
+        
+        if ($this->getGrammaticalGender()) {
+            $str .= "\t<grammaticalGender>{$this->getGrammaticalGender() }</grammaticalGender>\n";
+        }        
+     
+        if ($this->getGrammaticalGrade()) {
+            $str .= "\t<grammaticalGrade>{$this->getGrammaticalGrade() }</grammaticalGrade>\n";
+        }
+
+        if ($this->getGrammaticalNumber()) {
+            $str .= "\t<grammaticalNumber>{$this->getGrammaticalNumber() }</grammaticalNumber>\n";
+        }
+
+        if ($this->getGrammaticalTense()) {
+            $str .= "\t<grammaticalTense>{$this->getGrammaticalTense() }</grammaticalTense>\n";
+        }
+
+        if ($this->getGraphics()) {
+            $str .= "\t<graphics>{$this->getGraphics() }</graphics>\n";
+        }
+
+        if ($this->getImage()) {
+            $str .= "\t<image>{$this->getImage() }</image>\n";
+        }
+
+        if ($this->getOrhographyName()) {
+            $str .= "\t<orhographyName>{$this->getOrhographyName() }</orhographyName>\n";
+        }        
+
+        if ($this->getPerson()) {
+            $str .= "\t<person>{$this->getPerson() }</person>\n";
+        }
+
+        if ($this->getPhoneticForm()) {
+            $str .= "\t<phoneticForm>{$this->getPhoneticForm() }</phoneticForm>\n";
+        }
+
+        if ($this->getScript()) {
+            $str .= "\t<script>{$this->getScript() }</script>\n";
+        }
+
+        if ($this->getSound()) {
+            $str .= "\t<sound>{$this->getSound() }</sound>\n";
+        }        
+        
+        return $str;
+    }
 }
