@@ -13,7 +13,8 @@ use Rastija\Owl\Uri\UriFactory;
  *
  * @author Virginijus
  */
-abstract class AbstractDictionary implements DictionaryInterface {
+abstract class AbstractDictionary implements DictionaryInterface
+{
     /**
      * Resource ID
      * 

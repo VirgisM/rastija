@@ -17,50 +17,80 @@ namespace Rastija\Owl;
  *
  * @author Virginijus
  */
-class LmfEquivalent {
+class LmfEquivalent extends AbstractLmfClass
+{
     /**
      * LMF Equivalent language data property
      * 
      * @var string
      */
-    private $_language;
+    private $language;
+ 
+    /**
+     * LMF Equivalent orthography name data property
+     * 
+     * @var string 
+     */
+    private $orthographyName;
     
     /**
-     * LMF Equivalent rank data property
+     * LMF Equivalent script data property
      * 
      * @var string
      */
-    private $_rank = 1;
-            
-            
+    private $script;
+    
     /**
      * LMF Equivalent written form data property
      * 
      * @var string
      */
-    private $_writtenForm;
+    private $writtenForm;
     
     /* ------------------------ Not LMF ontology parameters ------------------*/    
     /**
-     * LMF individual URI
+     * LMF Equivalent rank data property
+     * Was added by Martynas
      * 
      * @var string
      */
-    private $_uri;
-    
-    
-    private $_uriBase;
+    private $_rank = 1;   
     
     public function setLanguage($lang) 
     {
-        $this->_language = ucfirst(strtolower($lang));
+        $this->language = ucfirst(strtolower($lang));
     }
     
     public function getLanguage() 
     {
-        return $this->_language;
+        return $this->language;
     }
     
+    public function getOrthographyName() {
+        return $this->orthographyName;
+    }
+
+    public function getScript() {
+        return $this->script;
+    }
+
+    public function setOrthographyName($orthographyName) {
+        $this->orthographyName = $orthographyName;
+    }
+
+    public function setScript($script) {
+        $this->script = $script;
+    }
+    
+    public function setWrittenForm($writtenForm)
+    {
+        $this->writtenForm = $writtenForm;
+    }
+   
+    public function getWrittenForm()
+    {
+        return $this->writtenForm;
+    }
     public function setRank($rank) 
     {
         $this->_rank = $rank;
@@ -71,71 +101,37 @@ class LmfEquivalent {
         return $this->_rank;
     }
     
-    public function setWrittenForm($writtenForm)
-    {
-        $this->_writtenForm = $writtenForm;
-    }
-   
-    public function getWrittenForm()
-    {
-        return $this->_writtenForm;
-    }
-    
-    public function setUri($uri)
-    {
-        $this->_uri = $uri;
-    }
-    
-    public function getUri()
-    {
-        // Generate uri
-        if (!$this->_uri && $this->getWrittenForm()) {
-            $this->_uri = $this->getUriBase() . '.' . $this->_fixUri($this->getWrittenForm()) . '.Equivalent-' . md5('Equivalent-' . $this->getWrittenForm(). $this->getRank()); 
-        }
-        return $this->_uri;
-    }
-    
     /**
-     * Function will remove unallowed simbols from uri
-     * 
-     * @param string $uri
+     * {@inheritdoc}
      */
-    private function _fixUri($uri)
-    {
-        return preg_replace('/[\[\]\{\}\<\>\'\"\&\s\t\n]/i', '_', $uri);
-    }
-    
-    public function setUriBase($uriBase)
-    {
-        $this->_uriBase = $uriBase;
-    }
-    
-    public function getUriBase()
-    {
-        return $this->_uriBase;
-    }
-    
     public function toLmfString()
     {
-/*
-<owl:NamedIndividual rdf:about="http://www.lexinfo.net/lmf#VU_LatviuLietuviu_zodynas.rusvaplaukis.Equivalent1b498250-0409-4ecc-93d5-916a97fdcb8c">
-    <writtenForm>rusvaplaukis</writtenForm>
-    <language>Lietuvių</language>
-    <rdfs:label>rusvaplaukis</rdfs:label>
-    <rdf:type rdf:resource="http://www.lexinfo.net/lmf#Equivalent"/>
-  </owl:NamedIndividual>
- */          
-        $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri()}\"> \n";
+        /*
+        <owl:NamedIndividual rdf:about="http://www.lexinfo.net/lmf#VU_LatviuLietuviu_zodynas.rusvaplaukis.Equivalent1b498250-0409-4ecc-93d5-916a97fdcb8c">
+            <writtenForm>rusvaplaukis</writtenForm>
+            <language>Lietuvių</language>
+            <rdfs:label>rusvaplaukis</rdfs:label>
+            <rdf:type rdf:resource="http://www.lexinfo.net/lmf#Equivalent"/>
+          </owl:NamedIndividual>
+         */          
+        $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri()}\">\n";
         if ($this->getWrittenForm()) {
-            $str .= "<writtenForm>{$this->getWrittenForm()}</writtenForm>";
-            $str .= "<rdfs:label>{$this->getWrittenForm()}-Equivalent</rdfs:label>";
+            $str .= "\t<writtenForm>{$this->getWrittenForm()}</writtenForm>\n";
         }
         if ($this->getLanguage()) {
-            $str .= "<language>{$this->getLanguage()}</language>";
+            $str .= "\t<language>{$this->getLanguage()}</language>\n";
         }
+        if ($this->getOrthographyName()) {
+            $str .= "\t<orthographyName>{$this->getOrthographyName()}</orthographyName>\n";
+        }
+        if ($this->getScript()) {
+            $str .= "\t<script>{$this->getScript()}</script>\n";
+        }    
         if ($this->getRank()) {
-            $str .= "<rank>{$this->getRank()}</rank>";
+            $str .= "\t<rank>{$this->getRank()}</rank>\n";
         }
+        
+        $str .= "\t<rdfs:label>{$this->getUri() }</rdfs:label>\n";
         $str .= "\t<rdf:type rdf:resource=\"&lmf;Equivalent\"/>\n";
         $str .= "</owl:NamedIndividual>\n";
         
