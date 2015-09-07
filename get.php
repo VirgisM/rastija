@@ -29,12 +29,17 @@ require_once( dirname( __FILE__ ) . '/Resource/DictionaryInterface.php');
 require_once( dirname( __FILE__ ) . '/Resource/AbstractDictionary.php');
 require_once( dirname( __FILE__ ) . '/Resource/EnLtDictionary.php');
 require_once( dirname( __FILE__ ) . '/Resource/LkiMainCard.php');
+require_once( dirname( __FILE__ ) . '/Resource/LkiSecondCard.php');
 
 
 /* Anglų-Lietuvių kalbų žodynas 62733 įrašai*/
 //$dic = new Resource\EnLtDictionary();
-//$dic->generateLmfOwl();
+//echo $dic->generateLmfOwl();
 
 /* Pagrindinė kartoteka deklaruojama 55933 įrašai, realiai 48823*/
-$card = new Resource\LkiMainCard();
+//$card = new Resource\LkiMainCard();
+//echo $card->generateLmfOwl();
+
+/* Papildymų kartoteka deklaruojama 55933 įrašai, realiai 48823*/
+$card = new Resource\LkiSecondCard();
 echo $card->generateLmfOwl();

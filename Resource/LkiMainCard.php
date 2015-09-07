@@ -7,7 +7,8 @@
  */
 namespace Rastija\Resource;
 use Rastija\Owl;
-use Rsstija\Owl\Uri;
+use Rastija\Owl\Uri;
+use Rastija\Service;
 
 /**
  * Description of LkiMainCard
@@ -40,9 +41,9 @@ class LkiMainCard extends AbstractDictionary
      * @return string - dictionary ID encoded with MD5
      */
     public function generateLmfOwl() {
-        $test = true;
+        $test = false;
         if ($test) {
-            $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_2.txt';
+            $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_1.txt';
             $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.owl';
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology_1' . '.owl';
         } else {
@@ -51,7 +52,7 @@ class LkiMainCard extends AbstractDictionary
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology' . '.owl';
         }
         // Get resource information from the service
-        //$resource = new Service\LkiisResource($this->_resourceId);
+        //$resource = new LkiisResource($this->getResourceId());
         //$resource->getRecords($filename, 7300);
         
         // Build individal for LMF ontology
@@ -64,7 +65,7 @@ class LkiMainCard extends AbstractDictionary
         return md5($this->getResourceId());
     }
     
-    private function buildLmfIndividuals($filename, $fileOfIndividuals)
+    protected function buildLmfIndividuals($filename, $fileOfIndividuals)
     {
         $resourceName = $this->getResourceName();
                 
@@ -246,7 +247,7 @@ class LkiMainCard extends AbstractDictionary
         fclose($fileIndividuals);
     }
     
-    private function createOwl($fileOfIndividuals, $resourceOwlFile)
+    protected function createOwl($fileOfIndividuals, $resourceOwlFile)
     {
         // Add LMF ontology to file
         $ontologyFile = $this->_ontologyFile;
