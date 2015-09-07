@@ -24,6 +24,12 @@ class EnLtDictionary extends AbstractDictionary
     public function __construct() {
         $this->setResourceId('VU/10485716');
         $this->setResourceName('Anglų-Lietuvių kalbų žodynas');
+
+        /** @var Uri\AbstractUri $uriFactory */
+        $uriFactory = new Owl\Uri\UriFactory();
+        $uriFactory->setUriBase('&lmf;zodynas.Anglų-Lietuvių_kalbų_žodynas');
+        
+        $this->setUriFactory($uriFactory);        
     }
     
     public function generateLmfOwl() {
@@ -47,17 +53,9 @@ class EnLtDictionary extends AbstractDictionary
         // Make owl of dictionary
         $this->createOwl($fileOfIndividuals, $resourceOwlFile);
         
-        return md5($this->_resourceId);
+        return md5($this->getResourceId());
     }
 
-    public function setResourceId($resourceId) {
-        $this->_resourceId = $resourceId;
-    }
-
-    public function setResourceName($resourceName) {
-        $this->_resourceName = $resourceName;
-    }
-    
     private function buildLmfIndividuals($filename, $fileOfIndividuals)
     {
         $resourceName = $this->getResourceName();
@@ -162,11 +160,20 @@ class EnLtDictionary extends AbstractDictionary
 
                     if ($isFirst) {
                         $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
-                        $lexicalEntry->setSeed($arr['id']);
-                        $lexicalEntry->setLemma($arr['metadata']['lemma']);
+                        $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
+                                $arr['metadata']['lemma'], 
+                                $arr['id']));                        
+                        
+                        // Set Lemma
+                        $lmfLemma = new Owl\LmfLemma();
+                        $lmfLemma->setWrittenForm($arr['metadata']['lemma']);
+                        $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
+                                        $arr['metadata']['lemma'], 
+                                        $arr['id']));
+                        $lexicalEntry->setLemma($lmfLemma);
 
                         $lexicalEntry->setPartOfSpeech($sense['partOfSpeach']);
-                        array_push($lexicalEntries, $lexicalEntry);
+                        array_push($lexicalEntries, $lexicalEntry);                        
                         $isFirst = FALSE;
                     } else {
                         reset($lexicalEntries);
@@ -181,26 +188,39 @@ class EnLtDictionary extends AbstractDictionary
                         // Creation of new entity of lexical entry
                         if (!$lexicalEntry) {
                             $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
-                            $lexicalEntry->setSeed($arr['id']);
-                            $lexicalEntry->setLemma($arr['metadata']['lemma'] . '-' . (sizeof($lexicalEntries)+1));
+                            $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
+                                    $arr['metadata']['lemma'] . '-' . (sizeof($lexicalEntries)+1), 
+                                    $arr['id']));                             
 
+                            // Set Lemma
+                            $lmfLemma = new Owl\LmfLemma();
+                            $lmfLemma->setWrittenForm($arr['metadata']['lemma']);
+                            $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
+                                            $arr['metadata']['lemma'] .  '-' . (sizeof($lexicalEntries)+1), 
+                                            $arr['id']));
+                            $lexicalEntry->setLemma($lmfLemma);
+                        
                             $lexicalEntry->setPartOfSpeech($sense['partOfSpeach']);
                             array_push($lexicalEntries, $lexicalEntry);
                         }
                     }
-                    $lmfSense->setUriBase($lexicalEntry->getUriBase());
-                    $lmfSense->setLemmaWrittenForm($lexicalEntry->getLemma());
+                    $lmfSense->setUri($this->getUriFactory()->create('Sense', 
+                            $lexicalEntry->getLemma()->getWrittenForm(),
+                            $arr['id']));
+                    $lmfSense->setLemmaWrittenForm($lexicalEntry->getLemma()->getWrittenForm());
 
                     $equivalents = $sense['equivalent'];
                     $rank = 1;
                     foreach ($equivalents as $equivalent) {
-                         $lmfEquivalent = new Owl\LmfEquivalent();
-                         $lmfEquivalent->setLanguage('Anglų');
-                         $lmfEquivalent->setWrittenForm($equivalent);
-                         $lmfEquivalent->setUriBase($lexicalEntry->getUriBase());
-                         $lmfEquivalent->setRank($rank++);
+                        $lmfEquivalent = new Owl\LmfEquivalent();
+                        $lmfEquivalent->setUri($this->getUriFactory()->create('Equivalent', 
+                                $equivalent, 
+                                $arr['id']  .  '-' . $rank));                         
+                        $lmfEquivalent->setLanguage('Anglų');
+                        $lmfEquivalent->setWrittenForm($equivalent);
+                        $lmfEquivalent->setRank($rank++);
 
-                         $lmfSense->addEquivalent($lmfEquivalent);
+                        $lmfSense->addEquivalent($lmfEquivalent);
                      }
                      $lexicalEntry->addSense($lmfSense);
                 }
@@ -282,17 +302,16 @@ class EnLtDictionary extends AbstractDictionary
             ///////////////////////////////////////////////////////////////////////////////////////
              -->
 <!--
-            <<owl:NamedIndividual rdf:about=\"{$this->_resourceLmfName}.Resource\">
-                <rdfs:label>{$this->_resourceName}</rdfs:label>
-                <&j.1;hasEdition rdf:resource=\"{$this->_resourceLmfName}.Edition\" />;
+            <<owl:NamedIndividual rdf:about=\"{$this->getUriFactory()->getUriBase()}.Resource\">
+                <rdfs:label>{$this->getResourceName()}</rdfs:label>
+                <&j.1;hasEdition rdf:resource=\"{$this->getUriFactory()->getUriBase()}}.Edition\" />;
                 <rdf:type rdf:resource=\"&j.1;lexicon\"/>
             </<owl:NamedIndividual>
             
-            <<owl:NamedIndividual rdf:about=\"{$this->_resourceLmfName}.Edition\" >
-                <rdfs:label>{$this->_resourceName}-Edition</rdfs:label>
+            <<owl:NamedIndividual rdf:about=\"{$this->getUriFactory()->getUriBase()}}.Edition\" >
+                <rdfs:label>{$this->getResourceName()}-Edition</rdfs:label>
                 <&j.1;date>2015</&j.1;date>
-                <rdf:type rdf:resource=\"&j.1;Edition\"/>
-            </<owl:NamedIndividual>
+                <rdf:type rdf:resource=\"&j.1;Edition
 -->            
         </rdf:RDF>
             ";
