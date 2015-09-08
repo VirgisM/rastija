@@ -40,6 +40,6 @@ require_once( dirname( __FILE__ ) . '/Resource/LkiSecondCard.php');
 //$card = new Resource\LkiMainCard();
 //echo $card->generateLmfOwl();
 
-/* Papildymų kartoteka deklaruojama 55933 įrašai, realiai 48823*/
+/* Papildymų kartoteka deklaruojama 561247 įrašai, realiai ???*/
 $card = new Resource\LkiSecondCard();
 echo $card->generateLmfOwl();

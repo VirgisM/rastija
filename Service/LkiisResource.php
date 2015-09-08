@@ -50,19 +50,19 @@ class LkiisResource
             }
         }
 
-        $i = 1;
+//        $i = 190001;
         while ($i <= $count) { 
             // Modify rowcount 
             if (($i + $rowsCount) >= $count ){
                 $rowsCount = $count - $i + 1;
             }            
+            echo $i . '-' . $rowsCount . "<br />";
             
             $xml = $lkiisClient->getRecords($resourceId, '2012-01-01', date('Y-m-d'), $i, $rowsCount);
             fwrite($file, $xml);
             
 
             $i += $rowsCount;
-            echo $i . '-' . $rowsCount;
         }
         fclose($file);
 

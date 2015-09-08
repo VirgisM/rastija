@@ -53,7 +53,7 @@ class LkiSecondCard extends LkiMainCard
         }
         // Get resource information from the service
         $resource = new Service\LkiisResource($this->getResourceId());
-        $resource->getRecords($filename, 0);
+        $resource->getRecords($filename, 190101); // records appear from ~190001
         
         // Build individal for LMF ontology
         $this->buildLmfIndividuals($filename, $fileOfIndividuals);
@@ -63,5 +63,5 @@ class LkiSecondCard extends LkiMainCard
         $this->createOwl($fileOfIndividuals, $resourceOwlFile);
         
         return md5($this->getResourceId());
-    } 
+    }
 }
