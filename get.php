@@ -31,6 +31,7 @@ require_once( dirname( __FILE__ ) . '/Resource/EnLtDictionary.php');
 require_once( dirname( __FILE__ ) . '/Resource/LkiMainCard.php');
 require_once( dirname( __FILE__ ) . '/Resource/LkiSecondCard.php');
 require_once( dirname( __FILE__ ) . '/Resource/LltiRiddleCard.php');
+require_once( dirname( __FILE__ ) . '/Resource/LltiSongCard.php');
 
 ini_set('memory_limit', '1048M');
 ini_set('upload_max_filesize', '1024M');
@@ -48,5 +49,9 @@ ini_set('upload_max_filesize', '1024M');
 //echo $card->generateLmfOwl();
 
 /* Mįslių kartoteka deklaruojama 80029 įrašai, realiai ??? */
-$card = new Resource\LltiRiddleCard();
+//$card = new Resource\LltiRiddleCard();
+//echo $card->generateLmfOwl();
+
+/* Pokario partizanų dainų kartoteka deklaruojama 3697 įrašai, realiai ??? */
+$card = new Resource\LltiSongCard();
 echo $card->generateLmfOwl();
