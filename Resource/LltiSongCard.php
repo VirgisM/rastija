@@ -137,7 +137,7 @@ class LltiSongCard extends AbstractDictionary
             }
             $recordNr++;     
             // Counting if posible attributes
-            
+            /*
             foreach ($arr['metadata'] as $nr => $keys) {
                 $key = array_keys($keys)[0];
                 
@@ -148,7 +148,7 @@ class LltiSongCard extends AbstractDictionary
                     $n[$key] = 1; 
                 }
             }
-            
+            */
             
             // Concert the array to lexical entry
             /* array contains all atributes of data structure
