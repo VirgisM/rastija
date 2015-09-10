@@ -30,7 +30,10 @@ require_once( dirname( __FILE__ ) . '/Resource/AbstractDictionary.php');
 require_once( dirname( __FILE__ ) . '/Resource/EnLtDictionary.php');
 require_once( dirname( __FILE__ ) . '/Resource/LkiMainCard.php');
 require_once( dirname( __FILE__ ) . '/Resource/LkiSecondCard.php');
+require_once( dirname( __FILE__ ) . '/Resource/LltiRiddleCard.php');
 
+ini_set('memory_limit', '1048M');
+ini_set('upload_max_filesize', '1024M');
 
 /* Anglų-Lietuvių kalbų žodynas 62733 įrašai*/
 //$dic = new Resource\EnLtDictionary();
@@ -40,6 +43,10 @@ require_once( dirname( __FILE__ ) . '/Resource/LkiSecondCard.php');
 //$card = new Resource\LkiMainCard();
 //echo $card->generateLmfOwl();
 
-/* Papildymų kartoteka deklaruojama 561247 įrašai, realiai ???*/
-$card = new Resource\LkiSecondCard();
+/* Papildymų kartoteka deklaruojama 560829 įrašai, realiai ??? */
+//$card = new Resource\LkiSecondCard();
+//echo $card->generateLmfOwl();
+
+/* Mįslių kartoteka deklaruojama 80029 įrašai, realiai ??? */
+$card = new Resource\LltiRiddleCard();
 echo $card->generateLmfOwl();
