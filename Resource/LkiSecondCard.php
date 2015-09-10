@@ -52,16 +52,67 @@ class LkiSecondCard extends LkiMainCard
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology' . '.owl';
         }
         // Get resource information from the service
-        $resource = new Service\LkiisResource($this->getResourceId());
-        $resource->getRecords($filename, 190101); // records appear from ~190001
+        //$resource = new Service\LkiisResource($this->getResourceId());
+        //$resource->getRecords($filename, 0); // records appear from ~190001
         
         // Build individal for LMF ontology
-        $this->buildLmfIndividuals($filename, $fileOfIndividuals);
-        
-        
-        // Make owl of dictionary
-        $this->createOwl($fileOfIndividuals, $resourceOwlFile);
-        
+        // LKISecond car file is very big so we split it it to parts
+        // Part size 150 MB
+        $partSize = 100 *1024 * 1024;        
+        if (filesize($filename) > $partSize) {
+            
+            // Splitting data file
+            $file = fopen($filename, 'r');
+            $content = fread($file, filesize($filename));
+            fclose($file);
+   
+            $parts = round(filesize($filename) / $partSize) + 1;
+            $startPoss = 0;
+            for ($i = 1; $i <= $parts; $i++) {
+                $partFileName = $filename . '_part_' . $i . '.txt';
+                $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.txt';
+                
+                $partText = substr($content, $startPoss, $partSize);
+                $content = substr($content, $partSize + 1);
+                $tmpStr = substr($content, 0, 1024 * 1024);
+
+                $endOfRecord = strpos($tmpStr, '</return>') + 9;
+                unset($tmpStr);
+                
+                $partText .= substr($content, 0, $endOfRecord);
+                if ($i != $parts) {
+                    $partText .= '</ns2:getRecordsResponse></soap:Body></soap:Envelope>' . "\n";
+                }
+                // remove unecessary tags
+                $partText = str_replace('</ns2:getRecordsResponse></soap:Body></soap:Envelope><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:getRecordsResponse xmlns:ns2="http://servicebus.lki/">',
+                    '', $partText);
+                $partFile = fopen($partFileName, 'w');
+                fwrite($partFile, $partText);
+                fclose($partFile);
+                unset($partText);
+
+                $content = substr($content, $endOfRecord);
+                $content = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:getRecordsResponse xmlns:ns2="http://servicebus.lki/">'
+                        . $content;
+            } 
+            
+            // Building of individuals and OWL
+            for ($i = 1 ; $i <= $parts; $i++) {
+                $partFileName = $filename . '_part_' . $i . '.txt';
+                $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.owl';
+                $partResourceOwlFile = $resourceOwlFile . '_part_' . $i . '.owl';
+                
+                $this->buildLmfIndividuals($partFileName, $partFileOfIndividuals);
+                
+                $this->createOwl($partFileOfIndividuals, $partResourceOwlFile);
+            }
+        } else {            
+            $this->buildLmfIndividuals($filename, $fileOfIndividuals);
+            
+            // Make owl of dictionary
+            $this->createOwl($fileOfIndividuals, $resourceOwlFile);            
+        }
+
         return md5($this->getResourceId());
     }
 }

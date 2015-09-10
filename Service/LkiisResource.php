@@ -50,13 +50,13 @@ class LkiisResource
             }
         }
 
-//        $i = 190001;
+        $i = 1;
         while ($i <= $count) { 
             // Modify rowcount 
             if (($i + $rowsCount) >= $count ){
                 $rowsCount = $count - $i + 1;
             }            
-            echo $i . '-' . $rowsCount . "<br />";
+            echo $i . '-' . $rowsCount . "<br />\n";
             
             $xml = $lkiisClient->getRecords($resourceId, '2012-01-01', date('Y-m-d'), $i, $rowsCount);
             fwrite($file, $xml);
@@ -67,6 +67,7 @@ class LkiisResource
         fclose($file);
 
         // Merge different SOAP enveloples
+        // @todo if file is big (500 MB) it will not work
         $file = fopen($filename, 'r');
         $content = fread($file, filesize($filename));
         fclose($file);
