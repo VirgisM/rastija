@@ -41,7 +41,7 @@ class LkiSecondCard extends LkiMainCard
      * @return string - dictionary ID encoded with MD5
      */
     public function generateLmfOwl() {
-        $test = true;
+        $test = false;
         if ($test) {
             $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_1.txt';
             $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.owl';
