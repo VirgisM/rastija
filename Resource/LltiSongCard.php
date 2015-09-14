@@ -38,7 +38,7 @@ class LltiSongCard extends AbstractDictionary
     /**
      *  Main function for owl generations
      * 
-     * @return string - dictionary ID encoded with MD5
+     * @return string - dictionary ID encoded with MD5isteklius
      */
     public function generateLmfOwl() {
         $test = false;
@@ -206,7 +206,14 @@ class LltiSongCard extends AbstractDictionary
                     $key = array_keys($keys)[0];
                     $attr = $keys[$key];
                     if ($key != 'dc:title' && $key != 'dc:subject') {
-                        $writtenForm .= "<div><b>{$attr['label']}:</b> {$attr['value']} </div>";
+                        if ($key == 'dc:description') {
+                            $val = str_replace("\n", '<br />', $attr['value']);
+                            $writtenForm .= "<div><em>{$attr['label']}:</em><br/> {$val} </div>";
+                        } else {
+                            $writtenForm .= "<div><em>{$attr['label']}:</em> {$attr['value']} </div>";
+                        }
+                        // Spacing between rows
+                        $writtenForm .= "<div style=\"height: 5px;\"></div>";
                     }
                 }
                 $writtenForm .= "]]>";

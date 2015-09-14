@@ -195,6 +195,8 @@ class LltiRiddleCard extends AbstractDictionary
                     
                     if ($key != 'dc:title') {
                         $writtenForm .= "<div><b>{$attr['label']}:</b> {$attr['value']} </div>";
+                        // Spacing between rows
+                        $writtenForm .= "<div style=\"height: 5px;\"></div>";
                     }
                 }
                 $writtenForm .= "]]>";
