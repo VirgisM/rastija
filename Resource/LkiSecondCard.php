@@ -44,11 +44,11 @@ class LkiSecondCard extends LkiMainCard
         $test = false;
         if ($test) {
             $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_1.txt';
-            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.owl';
+            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.txt';
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology_1' . '.owl';
         } else {
             $filename  = $this->_cacheDir . md5($this->getResourceId()) . '.txt';
-            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals' . '.owl';
+            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals' . '.txt';
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology' . '.owl';
         }
         // Get resource information from the service
@@ -57,8 +57,8 @@ class LkiSecondCard extends LkiMainCard
         
         // Build individal for LMF ontology
         // LKISecond car file is very big so we split it it to parts
-        // Part size 150 MB
-        $partSize = 100 *1024 * 1024;        
+        // Part size 50 MB
+        $partSize = 20 *1024 * 1024;        
         if (filesize($filename) > $partSize) {
             
             // Splitting data file
@@ -99,7 +99,7 @@ class LkiSecondCard extends LkiMainCard
             // Building of individuals and OWL
             for ($i = 1 ; $i <= $parts; $i++) {
                 $partFileName = $filename . '_part_' . $i . '.txt';
-                $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.owl';
+                $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.txt';
                 $partResourceOwlFile = $resourceOwlFile . '_part_' . $i . '.owl';
                 
                 $this->buildLmfIndividuals($partFileName, $partFileOfIndividuals);

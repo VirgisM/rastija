@@ -47,11 +47,61 @@ class EnLtDictionary extends AbstractDictionary
         //$resource = new Service\LkiisResource($this->_resourceId);
         //$resource->getRecords($filename, 100);
         
-        // Build individal for LMF ontology
-        $this->buildLmfIndividuals($filename, $fileOfIndividuals);
-        
-        // Make owl of dictionary
-        $this->createOwl($fileOfIndividuals, $resourceOwlFile);
+        // Sometimes it can find correct end record so number is atjusted
+        $partSize = 19 *1024 * 1024;        
+        if (filesize($filename) > $partSize) {
+            
+            // Splitting data file
+            $file = fopen($filename, 'r');
+            $content = fread($file, filesize($filename));
+            fclose($file);
+   
+            $parts = round(filesize($filename) / $partSize) + 1;
+            $startPoss = 0;
+            for ($i = 1; $i <= $parts; $i++) {
+                $partFileName = $filename . '_part_' . $i . '.txt';
+                $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.txt';
+                
+                $partText = substr($content, $startPoss, $partSize);
+                $content = substr($content, $partSize + 1);
+                $tmpStr = substr($content, 0, 1024 * 1024);
+
+                $endOfRecord = strpos($tmpStr, '</return>') + 9;
+                unset($tmpStr);
+                
+                $partText .= substr($content, 0, $endOfRecord);
+                if ($i != $parts) {
+                    $partText .= '</ns2:getRecordsResponse></soap:Body></soap:Envelope>' . "\n";
+                }
+                // remove unecessary tags
+                $partText = str_replace('</ns2:getRecordsResponse></soap:Body></soap:Envelope><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:getRecordsResponse xmlns:ns2="http://servicebus.lki/">',
+                    '', $partText);
+                $partFile = fopen($partFileName, 'w');
+                fwrite($partFile, $partText);
+                fclose($partFile);
+                unset($partText);
+
+                $content = substr($content, $endOfRecord);
+                $content = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:getRecordsResponse xmlns:ns2="http://servicebus.lki/">'
+                        . $content;
+            } 
+            
+            // Building of individuals and OWL
+            for ($i = 1 ; $i <= $parts; $i++) {
+                $partFileName = $filename . '_part_' . $i . '.txt';
+                $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.txt';
+                $partResourceOwlFile = $resourceOwlFile . '_part_' . $i . '.owl';
+                
+                $this->buildLmfIndividuals($partFileName, $partFileOfIndividuals);
+                
+                $this->createOwl($partFileOfIndividuals, $partResourceOwlFile);
+            }
+        } else {            
+            $this->buildLmfIndividuals($filename, $fileOfIndividuals);
+            
+            // Make owl of dictionary
+            $this->createOwl($fileOfIndividuals, $resourceOwlFile);            
+        }
         
         return md5($this->getResourceId());
     }
