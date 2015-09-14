@@ -194,7 +194,7 @@ class LltiRiddleCard extends AbstractDictionary
                 foreach ($arr['metadata'] as $key => $attr) {
                     
                     if ($key != 'dc:title') {
-                        $writtenForm .= "<div><b>{$attr['label']}:</b> {$attr['value']} </div>";
+                        $writtenForm .= "<div><em>{$attr['label']}:</em> {$attr['value']} </div>";
                         // Spacing between rows
                         $writtenForm .= "<div style=\"height: 5px;\"></div>";
                     }

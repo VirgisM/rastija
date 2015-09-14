@@ -41,7 +41,7 @@ class LkiMainCard extends AbstractDictionary
      * @return string - dictionary ID encoded with MD5
      */
     public function generateLmfOwl() {
-        $test = false;
+        $test = true;
         if ($test) {
             $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_1.txt';
             $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.owl';
@@ -227,10 +227,24 @@ class LkiMainCard extends AbstractDictionary
                 $lmfTextRepresentation ->setUri($this->getUriFactory()->create('TextRepresentation', 
                                 $arr['metadata']['word'] . '-' . $arr['metadata']['cardno'], 
                                 $arr['id']));
-                $writtenForm = "<![CDATA[ <div>Kortelės numeris: {$arr['metadata']['cardno']} </div>";
+                $writtenForm = "<![CDATA[";
+                
+                $writtenForm .= "<div><em>Kortelės numeris:</em> {$arr['metadata']['cardno']}</div>";
+                // Spacing between rows
+                $writtenForm .= "<div style=\"height: 5px;\"></div>";
+                
+                $writtenForm .= "<div><img width=\"238\" alt=\"\" src=\"{$arr['imageUrl']}\"></div>";
+                // Spacing between rows
+                $writtenForm .= "<div style=\"height: 5px;\"></div>";
+
                 if (!empty($arr['metadata']['sourcelocation'])) {
-                    $writtenForm .= "<strong>Metrika</strong><div>Vietovė: {$arr['metadata']['sourcelocation']} </div>";
+                    $writtenForm .= "<div>Metrika</div>";
+                    $writtenForm .= "<div><em>Vietovė:</em> {$arr['metadata']['sourcelocation']}</div>";
+                    
+                    // Spacing between rows
+                    $writtenForm .= "<div style=\"height: 5px;\"></div>";
                 }
+ 
                 $writtenForm .= "]]>";
                         
                 $lmfTextRepresentation->setWrittenForm($writtenForm);
