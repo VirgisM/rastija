@@ -47,7 +47,7 @@ class EnLtDictionary extends AbstractDictionary
         //$resource = new Service\LkiisResource($this->_resourceId);
         //$resource->getRecords($filename, 100);
         
-        // Sometimes it can find correct end record so number is atjusted
+        // File will be analysed by parts
         $partSize = 19 *1024 * 1024;        
         if (filesize($filename) > $partSize) {
             
@@ -63,7 +63,7 @@ class EnLtDictionary extends AbstractDictionary
                 $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.txt';
                 
                 $partText = substr($content, $startPoss, $partSize);
-                $content = substr($content, $partSize + 1);
+                $content = substr($content, $partSize);
                 $tmpStr = substr($content, 0, 1024 * 1024);
 
                 $endOfRecord = strpos($tmpStr, '</return>') + 9;

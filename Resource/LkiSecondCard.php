@@ -73,7 +73,7 @@ class LkiSecondCard extends LkiMainCard
                 $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.txt';
                 
                 $partText = substr($content, $startPoss, $partSize);
-                $content = substr($content, $partSize + 1);
+                $content = substr($content, $partSize);
                 $tmpStr = substr($content, 0, 1024 * 1024);
 
                 $endOfRecord = strpos($tmpStr, '</return>') + 9;

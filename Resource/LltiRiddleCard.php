@@ -55,8 +55,8 @@ class LltiRiddleCard extends AbstractDictionary
         //$resource = new Service\LkiisResource($this->getResourceId());       
         //$resource->getRecords($filename, 100);
 
-        // Sometimes it can find correct end record so number is atjusted
-        $partSize = 20 *1024 * 1024;        
+        // File will be analysed by parts
+        $partSize = 25 *1024 * 1024;        
         if (filesize($filename) > $partSize) {
          
             // Splitting data file
@@ -71,10 +71,11 @@ class LltiRiddleCard extends AbstractDictionary
                 $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.txt';
                 
                 $partText = substr($content, $startPoss, $partSize);
-                $content = substr($content, $partSize + 1);
+                $content = substr($content, $partSize);
                 $tmpStr = substr($content, 0, 1024 * 1024);
 
                 $endOfRecord = strpos($tmpStr, '</return>') + 9;
+                
                 unset($tmpStr);
                 
                 $partText .= substr($content, 0, $endOfRecord);
