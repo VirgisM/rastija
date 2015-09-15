@@ -21,6 +21,9 @@ class EnLtDictionary extends AbstractDictionary
     private $_cacheDir = 'cache/VU_EN-LT/';
     private $_ontologyFile = 'config/rastija_owl_v3_2015_07_30VM.owl';
 
+    /**
+     * Constructor
+     */
     public function __construct() {
         $this->setResourceId('VU/10485716');
         $this->setResourceName('Anglų-Lietuvių kalbų žodynas');
@@ -33,30 +36,30 @@ class EnLtDictionary extends AbstractDictionary
     }
     
     public function generateLmfOwl() {
-        $test = false;
+        $test = true;
         if ($test) {
             $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_1.txt';
-            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.owl';
+            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.txt';
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology_1' . '.owl';
         } else {
             $filename  = $this->_cacheDir . md5($this->getResourceId()) . '.txt';
-            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals' . '.owl';
+            $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals' . '.txt';
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology' . '.owl';
         }
         // Get resource information from the service
-        //$resource = new Service\LkiisResource($this->_resourceId);
-        //$resource->getRecords($filename, 100);
+        $resource = new Service\LkiisResource($this->getResourceId());
+        $resource->getRecords($filename, 100);
         
         // File will be analysed by parts
-        $partSize = 19 *1024 * 1024;        
+        $partSize = 7 *1024 * 1024;        
         if (filesize($filename) > $partSize) {
             
             // Splitting data file
             $file = fopen($filename, 'r');
             $content = fread($file, filesize($filename));
             fclose($file);
-   
-            $parts = round(filesize($filename) / $partSize) + 1;
+  
+           $parts = floor(filesize($filename) / $partSize) + 1;
             $startPoss = 0;
             for ($i = 1; $i <= $parts; $i++) {
                 $partFileName = $filename . '_part_' . $i . '.txt';
@@ -64,7 +67,8 @@ class EnLtDictionary extends AbstractDictionary
                 
                 $partText = substr($content, $startPoss, $partSize);
                 $content = substr($content, $partSize);
-                $tmpStr = substr($content, 0, 1024 * 1024);
+                $length = (strlen($content) < 1024 * 1024) ? strlen($content) : 1024 * 1024;
+                $tmpStr = substr($content, 0, $length);
 
                 $endOfRecord = strpos($tmpStr, '</return>') + 9;
                 unset($tmpStr);
@@ -140,7 +144,9 @@ class EnLtDictionary extends AbstractDictionary
                         if ($el->getAttribute('value') || $el->getAttribute('name') == 'Reiksme') {
                             // Lemma
                             if ($el->getAttribute('name') == 'AntrastinisZodis') {
-                                $ins['lemma'] = $el->getAttribute('value');  
+                                //if (strpos($writtenForm, '&') || strpos($writtenForm, '"' || strpos($writtenForm, '>' || strpos($writtenForm, '<' || strpos($writtenForm, "\'")))){
+                                    $ins['lemma'] = $el->getAttribute('value');  
+                                //} 
                             }
                             // Forms
                             if ($el->getAttribute('name') == 'Forma') {
@@ -181,7 +187,7 @@ class EnLtDictionary extends AbstractDictionary
                     $arr[$node->nodeName] = $node->nodeValue;
                 }
             }
-            
+         
             // TODO pridėti tarimą ir wordFormas
             // Concert the array to lexical entry
             /* array contains
@@ -194,16 +200,16 @@ class EnLtDictionary extends AbstractDictionary
              *      - (attr: imageURL)
              *      - (attr: sourceLink)
              *      - (attr: 
-             *      - pronunciation () - TODO
-             *      - wordForms        - TODO
+             *      - pronunciation () - @TODO
+             *      - wordForms        
              *      - senses
              *          - partOfSpeach
              *          - equivalent
              */
-            if ($arr['metadata']['lemma']) {
+            if (isset($arr['metadata']['lemma'])) {
                 $lexicalEntries = array();
 
-
+                $senseNr = 1;
                 $isFirst = TRUE;
                 foreach ($arr['metadata']['senses'] as $sense) {
                     $lmfSense = new Owl\LmfSense();
@@ -256,7 +262,7 @@ class EnLtDictionary extends AbstractDictionary
                     }
                     $lmfSense->setUri($this->getUriFactory()->create('Sense', 
                             $lexicalEntry->getLemma()->getWrittenForm(),
-                            $arr['id']));
+                            $arr['id'] . '-' . $senseNr++));
                     $lmfSense->setLemmaWrittenForm($lexicalEntry->getLemma()->getWrittenForm());
 
                     $equivalents = $sense['equivalent'];
@@ -274,6 +280,18 @@ class EnLtDictionary extends AbstractDictionary
                      }
                      $lexicalEntry->addSense($lmfSense);
                 }
+                // Word form
+                if (!empty($arr['metadata']['wordForms'])) {
+                    $rank = 1;
+                    foreach ($arr['metadata']['wordForms']  as $wordForm) {
+                        $lmfWordForm = new Owl\LmfWordForm();
+                        $lmfWordForm->setUri($this->getUriFactory()->create('WordForm', 
+                                $wordForm, 
+                                $arr['id']  .  '-' . $rank++));                         
+                        $lmfWordForm->setWrittenForm($wordForm);
+                        $lexicalEntry->addWordForm($lmfWordForm);
+                     }
+                }                
 
                 // When is more than one sense
                 foreach($lexicalEntries as $lexicalEntry) {

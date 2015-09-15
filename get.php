@@ -39,8 +39,8 @@ ini_set('memory_limit', '1048M');
 ini_set('upload_max_filesize', '1024M');
 
 /* Anglų-Lietuvių kalbų žodynas 62733 įrašai*/
-//$dic = new Resource\EnLtDictionary();
-//echo $dic->generateLmfOwl();
+$dic = new Resource\EnLtDictionary();
+echo $dic->generateLmfOwl();
 
 /* Pagrindinė kartoteka deklaruojama 55933 įrašai, realiai 48823*/
 //$card = new Resource\LkiMainCard();
@@ -59,5 +59,9 @@ ini_set('upload_max_filesize', '1024M');
 //echo $card->generateLmfOwl();
 
 /* Pokario partizanų dainų kartoteka deklaruojama 8275 įrašai, realiai ??? */
-$card = new Resource\LltiBeliefCard();
-echo $card->generateLmfOwl();
+//$card = new Resource\LltiBeliefCard();
+//echo $card->generateLmfOwl();
+
+/* Get resources */
+//$lkiisClient = new Service\LkiisSoapClient();
+//echo $lkiisClient->getResources();

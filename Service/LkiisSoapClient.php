@@ -36,8 +36,8 @@ class LkiisSoapClient
             $result = @$client->__soapCall("getResources", array());
             //var_dump($result);
         } catch (SoapFault $soapFault) {
-            //var_dump($soapFault);
-            //var_dump($client->__getLastRequest());
+            var_dump($soapFault);
+            var_dump($client->__getLastRequest());
             echo $soapFault->xdebug_message;
         }
         return $client->__getLastResponse();
@@ -58,9 +58,8 @@ class LkiisSoapClient
             $result = @$client->__soapCall("getRecords", array($params));
             //var_dump($result);
         } catch (SoapFault $soapFault) {
-            var_dump($client->__getLastRequest());
-            var_dump($soapFault);
-            echo $soapFault->xdebug_message;
+            //var_dump($client->__getLastRequest());
+            throw new \Exception($soapFault->xdebug_message);
         }
         return $client->__getLastResponse();  
     }
@@ -75,11 +74,9 @@ class LkiisSoapClient
 
         try {
             $result = @$client->__soapCall("getRecord", array($params));
-            var_dump($result);
         } catch (SoapFault $soapFault) {
             //var_dump($client->__getLastRequest());
-            //var_dump($soapFault);
-            echo $soapFault->xdebug_message;
+            throw new \Exception($soapFault->xdebug_message);
             return NULL;
         }
         return $result->return;        
@@ -96,11 +93,9 @@ class LkiisSoapClient
 
         try {
             $result = @$client->__soapCall("countRecords", array($params));
-            //var_dump($result);
         } catch (SoapFault $soapFault) {
-            var_dump($client->__getLastRequest());
-            //var_dump($soapFault);
-            echo $soapFault->xdebug_message;
+            //var_dump($client->__getLastRequest());
+            throw new \Exception($soapFault->xdebug_message);
         }
         return (int) $result->return;         
     }
