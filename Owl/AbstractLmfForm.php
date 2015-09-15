@@ -146,6 +146,11 @@ abstract class AbstractLmfForm extends AbstractLmfClass
     }
 
     public function setWrittenForm($writtenForm) {
+        // XML special chars &lt; (<), &amp; (&), &gt; (>), &quot; ("), and &apos; (').
+        if (strpos($writtenForm, '&') || strpos($writtenForm, '"' || strpos($writtenForm, '>' || strpos($writtenForm, '<' || strpos($writtenForm, ord("'")))))) {
+            echo "It is possible problem with word " . $writtenForm . ". Please do replace it with htmlentities";
+            $writtenForm = htmlentities($writtenForm);
+        }
         $this->writtenForm = $writtenForm;
     }
 

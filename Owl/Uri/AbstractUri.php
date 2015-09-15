@@ -51,7 +51,8 @@ abstract class AbstractUri
      */
     protected function fixUri($uri)
     {
-        return preg_replace('/[\[\]\{\}\<\>\'\"\&\s\t\n\,\;\%]/i', '_', $uri);
+        // Second space is invisible space chr(194)
+        return preg_replace('/[\[\]\{\}\<\>\'\"\&\s\t\n\,\;\%\ \ ]/i', '_', $uri);  
     }
     
     public function setUriBase($uriBase)
