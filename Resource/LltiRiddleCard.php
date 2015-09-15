@@ -64,7 +64,7 @@ class LltiRiddleCard extends AbstractDictionary
             $content = fread($file, filesize($filename));
             fclose($file);
    
-            $parts = round(filesize($filename) / $partSize) + 1;
+            $parts = floor(filesize($filename) / $partSize) + 1;
             $startPoss = 0;
             for ($i = 1; $i <= $parts; $i++) {
                 $partFileName = $filename . '_part_' . $i . '.txt';
@@ -72,7 +72,8 @@ class LltiRiddleCard extends AbstractDictionary
                 
                 $partText = substr($content, $startPoss, $partSize);
                 $content = substr($content, $partSize);
-                $tmpStr = substr($content, 0, 1024 * 1024);
+                $length = (strlen($content) < 1024 * 1024) ? strlen($content) : 1024 * 1024;
+                $tmpStr = substr($content, 0, $length);
 
                 $endOfRecord = strpos($tmpStr, '</return>') + 9;
                 
