@@ -36,6 +36,9 @@ abstract class AbstractDictionary implements DictionaryInterface
      */    
     private $uriFactory;
     
+    /**
+     * {@inheritdoc}
+     */
     abstract public function generateLmfOwl();
     
 

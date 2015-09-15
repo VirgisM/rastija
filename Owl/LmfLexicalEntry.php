@@ -33,6 +33,12 @@ class LmfLexicalEntry extends AbstractLmfClass
      * @var array of LmfSense's 
      */
     private $senses = array();
+
+    /**
+     *
+     * @var array of LmfWordForm's 
+     */
+    private $wordForms = array();
     
     /**
      * Lemma  of the lexical entry
@@ -126,6 +132,17 @@ class LmfLexicalEntry extends AbstractLmfClass
         array_push($this->senses, $sense);
     }
     
+    /**
+     * Equivalent to hasWordForm property
+     * 
+     * @param \Rastija\Owl\LmgWordForm $wordForm
+     */
+    public function addWordForm(LmfWordForm $wordForm)
+    {
+        array_push($this->wordForms, $wordForm);
+    }
+    
+    
     public function getNextSenseRank() {
         return $this->_nextSenseRank;
     }
@@ -149,6 +166,10 @@ class LmfLexicalEntry extends AbstractLmfClass
             $str .= "\t<hasSense rdf:resource=\"{$sense->getUri() }\"/>\n";
         }
 
+        foreach ($this->wordForms as $wordForm) {
+            $str .= "\t<hasWordForm rdf:resource=\"{$wordForm->getUri() }\"/>\n";
+        }
+        
         $str .= "\t<j.1:lexicon rdf:resource=\"{$this->getResourceUri() }\"/>\n";
         $str .= "\t<rdf:type rdf:resource=\"&lmf;LexicalEntry\"/>\n";
         $str .= "</owl:NamedIndividual>\n";
@@ -162,6 +183,12 @@ class LmfLexicalEntry extends AbstractLmfClass
         foreach ($this->senses as $sense) {
             /* @var $sense LmfSense */
             $str .= $sense->toLmfString();
+        }
+
+        /* WordForms */
+        foreach ($this->wordForms as $wordForm) {
+            /* @var $wordForm LmfWordForm */
+            $str .= $wordForm->toLmfString();
         }
         
         return $str;
