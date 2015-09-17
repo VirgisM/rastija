@@ -320,6 +320,14 @@ class LltiRiddleCard extends AbstractDictionary
             ";
         
         fwrite($fileResourceOwl, $resourceAnnotationStr);
-        fclose($fileResourceOwl);        
+        fclose($fileResourceOwl);
+        
+        // xml validations
+        try {
+            $dom = new \DOMDocument('1.0', 'UTF-8');
+            $dom->loadXML($xml);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }        
     }
 }
