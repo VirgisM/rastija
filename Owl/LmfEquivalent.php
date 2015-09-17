@@ -84,6 +84,9 @@ class LmfEquivalent extends AbstractLmfClass
     
     public function setWrittenForm($writtenForm)
     {
+        if (strpos($writtenForm, '&') || strpos($writtenForm, '"') || strpos($writtenForm, '>') || strpos($writtenForm, '<') || strpos($writtenForm, ord("'"))) {
+            echo "It is possible problem with Lemma written form: [" . $writtenForm . "]. Please do replace it with htmlspecialchars </br>\n";        
+        }
         $this->writtenForm = $writtenForm;
     }
    
