@@ -36,7 +36,7 @@ class EnLtDictionary extends AbstractDictionary
     }
     
     public function generateLmfOwl() {
-        $test = true;
+        $test = false;
         if ($test) {
             $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_1.txt';
             $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.txt';
@@ -47,11 +47,11 @@ class EnLtDictionary extends AbstractDictionary
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology' . '.owl';
         }
         // Get resource information from the service
-        $resource = new Service\LkiisResource($this->getResourceId());
-        $resource->getRecords($filename, 100);
+        //$resource = new Service\LkiisResource($this->getResourceId());
+        //$resource->getRecords($filename, 100);
         
         // File will be analysed by parts
-        $partSize = 7 *1024 * 1024;        
+        $partSize = 4 *1024 * 1024;        
         if (filesize($filename) > $partSize) {
             
             // Splitting data file
@@ -59,7 +59,7 @@ class EnLtDictionary extends AbstractDictionary
             $content = fread($file, filesize($filename));
             fclose($file);
   
-           $parts = floor(filesize($filename) / $partSize) + 1;
+            $parts = floor(filesize($filename) / $partSize) + 1;
             $startPoss = 0;
             for ($i = 1; $i <= $parts; $i++) {
                 $partFileName = $filename . '_part_' . $i . '.txt';
@@ -91,7 +91,7 @@ class EnLtDictionary extends AbstractDictionary
             } 
             
             // Building of individuals and OWL
-            for ($i = 1 ; $i <= $parts; $i++) {
+            for ($i = 6 ; $i <= 6; $i++) {
                 $partFileName = $filename . '_part_' . $i . '.txt';
                 $partFileOfIndividuals = $fileOfIndividuals  . '_part_' . $i . '.txt';
                 $partResourceOwlFile = $resourceOwlFile . '_part_' . $i . '.owl';
@@ -144,9 +144,7 @@ class EnLtDictionary extends AbstractDictionary
                         if ($el->getAttribute('value') || $el->getAttribute('name') == 'Reiksme') {
                             // Lemma
                             if ($el->getAttribute('name') == 'AntrastinisZodis') {
-                                //if (strpos($writtenForm, '&') || strpos($writtenForm, '"' || strpos($writtenForm, '>' || strpos($writtenForm, '<' || strpos($writtenForm, "\'")))){
-                                    $ins['lemma'] = $el->getAttribute('value');  
-                                //} 
+                                $ins['lemma'] = htmlspecialchars($el->getAttribute('value'));  
                             }
                             // Forms
                             if ($el->getAttribute('name') == 'Forma') {
@@ -174,7 +172,8 @@ class EnLtDictionary extends AbstractDictionary
 
                                         // Equivalents
                                         if ($sense->getAttribute('name') == 'Atitikmuo') {
-                                            $senseArr['equivalent'][] = $sense->getAttribute('value');
+                                            // Dictionary can contain ilegal xml chars
+                                            $senseArr['equivalent'][] = htmlspecialchars($sense->getAttribute('value'));
                                         }
                                     }
                                 }
@@ -269,10 +268,14 @@ class EnLtDictionary extends AbstractDictionary
                     $rank = 1;
                     foreach ($equivalents as $equivalent) {
                         $lmfEquivalent = new Owl\LmfEquivalent();
+                        // Bug "patekti į nepatogią padėtį" firs space is nor normal
+                        if ($equivalent == 'patekti į nepatogią padėtį') {
+                            $equivalent = 'patekti į nepatogią padėtį';
+                        }
                         $lmfEquivalent->setUri($this->getUriFactory()->create('Equivalent', 
                                 $equivalent, 
                                 $arr['id']  .  '-' . $rank));                         
-                        $lmfEquivalent->setLanguage('Anglų');
+                        $lmfEquivalent->setLanguage('Lietuvių');
                         $lmfEquivalent->setWrittenForm($equivalent);
                         $lmfEquivalent->setRank($rank++);
 
@@ -298,7 +301,7 @@ class EnLtDictionary extends AbstractDictionary
                     fwrite($fileIndividuals, $lexicalEntry->toLmfString());
                 }
             }
-            echo '<br />' . $recordNr++ . '-' . $arr['id'] . '-' .  $arr['metadata']['lemma'];
+            //echo '<br />' . $recordNr++ . '-' . $arr['id'] . '-' .  $arr['metadata']['lemma'];
         }
 
         fclose($fileIndividuals);
@@ -385,6 +388,18 @@ class EnLtDictionary extends AbstractDictionary
             ";
         
         fwrite($fileResourceOwl, $resourceAnnotationStr);
-        fclose($fileResourceOwl);        
+        fclose($fileResourceOwl);
+           
+        // ontology validation
+        $file = fopen($resourceOwlFile, 'r');
+        $xml = fread($file, filesize($resourceOwlFile));
+        fclose($file);
+
+        try {
+            $dom = new \DOMDocument('1.0', 'UTF-8');
+            $dom->loadXML($xml);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }           
     }
 }
