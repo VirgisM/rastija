@@ -32,7 +32,7 @@ class LkiisResource
      * @param string $filename
      * @param int $count (if count not set function will get all records)
      */
-    public function getRecords($filename, $count = 0)
+    public function getRecords($filename, $count = 0, $rowsCount = 5000)
     {
         $lkiisClient = $this->_lkiisClient;
         $resourceId = $this->_resourceId;
@@ -41,7 +41,7 @@ class LkiisResource
         $file = fopen($filename, 'w');
         fwrite($file, '');
 
-        $rowsCount = 5000;
+//        $rowsCount = 5000;
         if (!$count) {
             $count = $lkiisClient->countRecords($resourceId, '2012-01-01', date('Y-m-d'));
         } else {
