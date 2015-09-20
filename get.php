@@ -3,7 +3,6 @@
 namespace Rastija;
 use Rastija\Resource;
 
-
 require_once( dirname( __FILE__ ) . '/Service/SearchServices.class.php' );
 require_once( dirname( __FILE__ ) . '/Service/LkiisSoapClient.php');
 require_once( dirname( __FILE__ ) . '/Service/LkiisResource.php');
@@ -33,14 +32,18 @@ require_once( dirname( __FILE__ ) . '/Resource/LkiSecondCard.php');
 require_once( dirname( __FILE__ ) . '/Resource/LltiRiddleCard.php');
 require_once( dirname( __FILE__ ) . '/Resource/LltiSongCard.php');
 require_once( dirname( __FILE__ ) . '/Resource/LltiBeliefCard.php');
+require_once( dirname( __FILE__ ) . '/Resource/LkiPhraseological.php');
+require_once( dirname( __FILE__ ) . '/Resource/LtEnDictionary.php');
+require_once( dirname( __FILE__ ) . '/Resource/LatLtDictionary.php');
+require_once( dirname( __FILE__ ) . '/Resource/GrLtDictionary.php');
 
 // Maximum memory with is allowed by php
 ini_set('memory_limit', '1048M');
 ini_set('upload_max_filesize', '1024M');
 
-/* Anglų-Lietuvių kalbų žodynas 62733 įrašai*/
-$dic = new Resource\EnLtDictionary();
-echo $dic->generateLmfOwl();
+/* Anglų-Lietuvių kalbų žodynas 62733 įrašai, realiai dabar 70593*/
+//$dic = new Resource\EnLtDictionary();
+//echo $dic->generateLmfOwl();
 
 /* Pagrindinė kartoteka deklaruojama 55933 įrašai, realiai 48823*/
 //$card = new Resource\LkiMainCard();
@@ -65,3 +68,19 @@ echo $dic->generateLmfOwl();
 /* Get resources */
 //$lkiisClient = new Service\LkiisSoapClient();
 //echo $lkiisClient->getResources();
+
+/* Frazeologijos žodynas 3311 įrašai*/
+$dic = new Resource\LkiPhraseological();
+echo $dic->generateLmfOwl();
+
+/* Lietuvių anglų žodynas  78874 įrašai*/
+//$dic = new Resource\LtEnDictionary();
+//echo $dic->generateLmfOwl();
+
+/* Lotynų Lietuvių anglų žodynas 36265 įrašai*/
+//$dic = new Resource\LatLtDictionary();
+//echo $dic->generateLmfOwl();
+
+/* Senovės graikų Lietuvių anglų žodynas 22803 įrašai*/
+//$dic = new Resource\GrLtDictionary();
+//echo $dic->generateLmfOwl();
