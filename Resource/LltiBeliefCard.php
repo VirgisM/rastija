@@ -301,12 +301,16 @@ class LltiBeliefCard extends AbstractDictionary
         fwrite($fileResourceOwl, $resourceAnnotationStr);
         fclose($fileResourceOwl);
         
-        // xml validations
+        // ontology validation
+        $file = fopen($resourceOwlFile, 'r');
+        $xml = fread($file, filesize($resourceOwlFile));
+        fclose($file);
+
         try {
             $dom = new \DOMDocument('1.0', 'UTF-8');
             $dom->loadXML($xml);
         } catch (\Exception $e) {
             echo $e->getMessage();
-        }        
+        }  
     }
 }
