@@ -11,25 +11,26 @@ use Rastija\Owl;
 use Rastija\Service;
 
 /**
- * Description of LtEnDictionary
- *
+ * Description of Greek Lithuanian Dictionary
+ * Strukture is equivalent to Latin Lithuanian structure
+ * 
  * @author Virginijus
  */
-class EnLtDictionary extends AbstractDictionary
+class GrLtDictionary extends AbstractDictionary
 {
-    private $_cacheDir = 'cache/VU_EN-LT/';
+    private $_cacheDir = 'cache/VU_GR-LT/';
     private $_ontologyFile = 'config/rastija_owl_v3_2015_07_30VM.owl';
 
     /**
      * Constructor
      */
     public function __construct() {
-        $this->setResourceId('VU/10485716');
-        $this->setResourceName('Anglų-Lietuvių kalbų žodynas');
+        $this->setResourceId('VU/10485895');
+        $this->setResourceName('Senosios graikų-lietuvių kalbų žodynas');
 
         /** @var Uri\AbstractUri $uriFactory */
         $uriFactory = new Owl\Uri\UriFactory();
-        $uriFactory->setUriBase('&lmf;zodynas.Anglų-Lietuvių_kalbų_žodynas');
+        $uriFactory->setUriBase('&lmf;zodynas.Senosios_graikų-lietuvių_kalbų_žodynas');
         
         $this->setUriFactory($uriFactory);        
     }
@@ -47,10 +48,10 @@ class EnLtDictionary extends AbstractDictionary
         }
         // Get resource information from the service
         //$resource = new Service\LkiisResource($this->getResourceId());
-        //$resource->getRecords($filename, 100);
-        
+        //$resource->getRecords($filename, 0);
+
         // File will be analysed by parts
-        $partSize = 4 *1024 * 1024;        
+        $partSize = 7 *1024 * 1024;        
         if (filesize($filename) > $partSize) {
             
             // Splitting data file
@@ -122,6 +123,20 @@ class EnLtDictionary extends AbstractDictionary
 
         $fileIndividuals = fopen($fileOfIndividuals, "w+");
         $recordNr = 1;
+        /*
+         * Datastructure
+         * Convert the array to lexical entry
+         * array contains
+         * - id
+         * - header
+         * - status
+         * - metadata
+         *      - AntrastinisZodis
+         *      - Reikšme
+         *      - Straipnelis - kažkoks užkoduotas tekstas  @TODO
+         *      - NuorodosId - nenaudojamas
+         */
+        $n = array();
         foreach($dom->getElementsByTagName('return') as $domRecord) {
             /* @var $domRecord \DOMElement */
             $nodes = $domRecord->childNodes;
@@ -143,40 +158,30 @@ class EnLtDictionary extends AbstractDictionary
                         if ($el->getAttribute('value') || $el->getAttribute('name') == 'Reiksme') {
                             // Lemma
                             if ($el->getAttribute('name') == 'AntrastinisZodis') {
-                                $ins['lemma'] = htmlspecialchars($el->getAttribute('value'));  
-                            }
-                            // Forms
-                            if ($el->getAttribute('name') == 'Forma') {
-                                $ins['wordForms'][] = $el->getAttribute('value');
-                            }
-                            // Pronunciation
-                            if ($el->getAttribute('name') == 'Tarimas') {
-                                $ins['pronunciation'] = $el->getAttribute('value');
+                                // Data bug fixes
+                                if ($el->getAttribute('value') == 'ἀποκνητέον ') {
+                                    $ins['lemma'] = 'ἀποκνητέον';
+                                } elseif ($el->getAttribute('value') == 'ἀχυρμιά ') {
+                                    $ins['lemma'] = 'ἀχυρμιά';    
+                                } else {
+                                    $ins['lemma'] = htmlspecialchars($el->getAttribute('value'));  
+                                }
                             }
 
                             // Senses
                             if ($el->getAttribute('name') == 'Reiksme') {
-                                $senseArr = array();
-
-                                foreach ($el->childNodes as $sense) {
-
-                                    // There are some DOMTExt nodes, so we will ignore them
-                                    if (get_class($sense) == 'DOMElement') {
-                                        /* @var $sense \DOMElement */
-
-                                        // PartOfSpeach
-                                        if ($sense->getAttribute('name') == 'KalbosDalis') {
-                                            $senseArr['partOfSpeach'] = $this->fullAbbreviation($sense->getAttribute('value'));
-                                        }
-
-                                        // Equivalents
-                                        if ($sense->getAttribute('name') == 'Atitikmuo') {
-                                            // Dictionary can contain ilegal xml chars
-                                            $senseArr['equivalent'][] = htmlspecialchars($sense->getAttribute('value'));
-                                        }
-                                    }
+                                // There are some DOMTExt nodes, so we will ignore them
+                                // Equivalents
+                                // Data bug fixes 
+                                if ($el->getAttribute('value') == 'regzti pinkles, kėslus') {
+                                    $ins['senses'][] = array('equivalent' => array('regzti pinkles, kėslus'));
+                                } elseif ($el->getAttribute('value') == 'arba ἀποδεκτός, όν  laukiamas, priimtinas') {
+                                    $ins['senses'][] = array('equivalent' => array('arba ἀποδεκτός, όν laukiamas, priimtinas'));
+                                } elseif ($el->getAttribute('value') == 'ἀποκνητέον ') {
+                                    $ins['senses'][] = array('equivalent' => array('ἀποκνητέον'));
+                                } else {
+                                    $ins['senses'][] = array('equivalent' => array(htmlspecialchars(trim($el->getAttribute('value')))));
                                 }
-                                $ins['senses'][] = $senseArr; 
                             }
                         }
                     }
@@ -185,92 +190,45 @@ class EnLtDictionary extends AbstractDictionary
                     $arr[$node->nodeName] = $node->nodeValue;
                 }
             }
-         
+       
             // TODO pridėti tarimą ir wordFormas
-            // Concert the array to lexical entry
+            // Convert the array to lexical entry
             /* array contains
              * - id
              * - header
              * - status
              * - metadata
-             *      - lemma (attr: word)
-             *      - (attr: writer)
-             *      - (attr: imageURL)
-             *      - (attr: sourceLink)
-             *      - (attr: 
-             *      - pronunciation () - @TODO
-             *      - wordForms        
+             *      - lemma
              *      - senses
-             *          - partOfSpeach
              *          - equivalent
              */
             if (isset($arr['metadata']['lemma'])) {
-                $lexicalEntries = array();
+                $senseNr = 1;                
+                $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
+                $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
+                        $arr['metadata']['lemma'], 
+                        $arr['id']));                        
 
-                $senseNr = 1;
-                $isFirst = TRUE;
+                // Set Lemma
+                $lmfLemma = new Owl\LmfLemma();
+                $lmfLemma->setWrittenForm($arr['metadata']['lemma']);
+                $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
+                                $arr['metadata']['lemma'], 
+                                $arr['id']));
+                $lexicalEntry->setLemma($lmfLemma);                
+                
                 foreach ($arr['metadata']['senses'] as $sense) {
                     $lmfSense = new Owl\LmfSense();
-
-                    if ($isFirst) {
-                        $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
-                        $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
-                                $arr['metadata']['lemma'], 
-                                $arr['id']));                        
-                        
-                        // Set Lemma
-                        $lmfLemma = new Owl\LmfLemma();
-                        $lmfLemma->setWrittenForm($arr['metadata']['lemma']);
-                        $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
-                                        $arr['metadata']['lemma'], 
-                                        $arr['id']));
-                        $lexicalEntry->setLemma($lmfLemma);
-
-                        $lexicalEntry->setPartOfSpeech($sense['partOfSpeach']);
-                        array_push($lexicalEntries, $lexicalEntry);                        
-                        $isFirst = FALSE;
-                    } else {
-                        reset($lexicalEntries);
-                        $lexicalEntry = NULL;
-                        // Check if lexical entry with specified part of speech exists
-                        foreach($lexicalEntries as $lexEntry) {
-                            /* @var $lexEntry Owl\LmfLexicalEntry */
-                            if ($lexEntry->getPartOfSpeech() == $sense['partOfSpeach']) {
-                                $lexicalEntry = $lexEntry;
-                            }
-                        }
-                        // Creation of new entity of lexical entry
-                        if (!$lexicalEntry) {
-                            $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
-                            $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
-                                    $arr['metadata']['lemma'] . '-' . (sizeof($lexicalEntries)+1), 
-                                    $arr['id']));                             
-
-                            // Set Lemma
-                            $lmfLemma = new Owl\LmfLemma();
-                            $lmfLemma->setWrittenForm($arr['metadata']['lemma']);
-                            $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
-                                            $arr['metadata']['lemma'] .  '-' . (sizeof($lexicalEntries)+1), 
-                                            $arr['id']));
-                            $lexicalEntry->setLemma($lmfLemma);
-                        
-                            $lexicalEntry->setPartOfSpeech($sense['partOfSpeach']);
-                            array_push($lexicalEntries, $lexicalEntry);
-                        }
-                    }
+  
                     $lmfSense->setUri($this->getUriFactory()->create('Sense', 
                             $lexicalEntry->getLemma()->getWrittenForm(),
                             $arr['id'] . '-' . $senseNr++));
                     $lmfSense->setLemmaWrittenForm($lexicalEntry->getLemma()->getWrittenForm());
 
-                    $equivalents = $sense['equivalent'];
+                    $equivalents = $sense['equivalent'];                
                     $rank = 1;
                     foreach ($equivalents as $equivalent) {
                         $lmfEquivalent = new Owl\LmfEquivalent();
-                        // Bug "patekti į nepatogią padėtį" firs space is nor normal
-                        if ($equivalent == 'patekti į nepatogią padėtį') {
-                            $equivalent = 'patekti į nepatogią padėtį';
-                        }
                         $lmfEquivalent->setUri($this->getUriFactory()->create('Equivalent', 
                                 $equivalent, 
                                 $arr['id']  .  '-' . $rank));                         
@@ -282,62 +240,16 @@ class EnLtDictionary extends AbstractDictionary
                      }
                      $lexicalEntry->addSense($lmfSense);
                 }
-                // Word form
-                if (!empty($arr['metadata']['wordForms'])) {
-                    $rank = 1;
-                    foreach ($arr['metadata']['wordForms']  as $wordForm) {
-                        $lmfWordForm = new Owl\LmfWordForm();
-                        $lmfWordForm->setUri($this->getUriFactory()->create('WordForm', 
-                                $wordForm, 
-                                $arr['id']  .  '-' . $rank++));                         
-                        $lmfWordForm->setWrittenForm($wordForm);
-                        $lexicalEntry->addWordForm($lmfWordForm);
-                     }
-                }                
-
-                // When is more than one sense
-                foreach($lexicalEntries as $lexicalEntry) {
-                    fwrite($fileIndividuals, $lexicalEntry->toLmfString());
-                }
+                
+                fwrite($fileIndividuals, $lexicalEntry->toLmfString());
+                echo '<br />' . $recordNr++ . '-' . $arr['id'] . '-' .  $arr['metadata']['lemma']. "\n";
             }
-            //echo '<br />' . $recordNr++ . '-' . $arr['id'] . '-' .  $arr['metadata']['lemma'];
         }
-
         fclose($fileIndividuals);
-    }
-
-    private function fullAbbreviation($abbr)
-    {
-        // From http://members.peak.org/~jeremy/dictionaryclassic/chapters/abbreviations.php
-        $map = array (
-            'a'    => 'adjective ',   // my quess by Alkonas
-            'abbr' => 'abbreviation',
-            'acr'  => 'acronym',
-            'adj'  => 'adjective',
-            'adv'  => 'adverb',
-            'art'  => 'article', // my quess
-            'comb' => 'prefix',   // my quess
-            'conj' => 'conjunction',
-            'int'  => 'interjection', // my quess by Alkonas
-            'intj' => 'interjection',
-            'n'    => 'noun',
-            'num'  => 'numeral', // my quess by Alkonas. According to source it should be a number
-            'part' => 'particle', // my quess by Alkonas
-            'prep' => 'preposition',
-            'pref' => 'prefix',
-            'pron' => 'pronoun',
-            'v'    => 'verb',
-            // Free part of speech
-            'num card' => 'cardinal (numeral)', //my quess by Alkonas
-            'phrase'   => 'phrase',
-            'prefix'   => 'prefix',
-        );
-        if (isset($map[$abbr])) {
-            return $map[$abbr];
-        } else {
-            echo "Not mapped abbreviation " . $abbr;
-            return $abbr;
-        }
+        
+        if (!empty($n)) {
+            print_r($n);
+        }        
     }
     
     private function createOwl($fileOfIndividuals, $resourceOwlFile)
@@ -388,7 +300,7 @@ class EnLtDictionary extends AbstractDictionary
         
         fwrite($fileResourceOwl, $resourceAnnotationStr);
         fclose($fileResourceOwl);
-           
+        
         // ontology validation
         $file = fopen($resourceOwlFile, 'r');
         $xml = fread($file, filesize($resourceOwlFile));
@@ -399,6 +311,6 @@ class EnLtDictionary extends AbstractDictionary
             $dom->loadXML($xml);
         } catch (\Exception $e) {
             echo $e->getMessage();
-        }           
+        }  
     }
 }
