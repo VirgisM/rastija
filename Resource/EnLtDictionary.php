@@ -17,7 +17,6 @@ use Rastija\Service;
  */
 class EnLtDictionary extends AbstractDictionary
 {
-    private $_resourceLmfName = '&j.1;zodynas.Anglų-Lietuvių_kalbų_žodynas'; //.Resource
     private $_cacheDir = 'cache/VU_EN-LT/';
     private $_ontologyFile = 'config/rastija_owl_v3_2015_07_30VM.owl';
 

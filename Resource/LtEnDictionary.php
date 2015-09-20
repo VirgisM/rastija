@@ -17,26 +17,25 @@ use Rastija\Service;
  */
 class LtEnDictionary extends AbstractDictionary
 {
-    private $_resourceLmfName = '&j.1;zodynas.Anglų-Lietuvių_kalbų_žodynas'; //.Resource
-    private $_cacheDir = 'cache/VU_EN-LT/';
+    private $_cacheDir = 'cache/VU_LT-EN/';
     private $_ontologyFile = 'config/rastija_owl_v3_2015_07_30VM.owl';
 
     /**
      * Constructor
      */
     public function __construct() {
-        $this->setResourceId('VU/10485716');
-        $this->setResourceName('Anglų-Lietuvių kalbų žodynas');
+        $this->setResourceId('VU/10485995');
+        $this->setResourceName('Lietuvių-Anglų kalbų žodynas');
 
         /** @var Uri\AbstractUri $uriFactory */
         $uriFactory = new Owl\Uri\UriFactory();
-        $uriFactory->setUriBase('&lmf;zodynas.Anglų-Lietuvių_kalbų_žodynas');
+        $uriFactory->setUriBase('&lmf;zodynas.Lietuvių-Anglų_kalbų_žodynas');
         
         $this->setUriFactory($uriFactory);        
     }
     
     public function generateLmfOwl() {
-        $test = true;
+        $test = false;
         if ($test) {
             $filename  = $this->_cacheDir . md5($this->getResourceId()) . '_1.txt';
             $fileOfIndividuals = $this->_cacheDir . md5($this->getResourceId()) . '_individuals_1' . '.txt';
@@ -47,11 +46,11 @@ class LtEnDictionary extends AbstractDictionary
             $resourceOwlFile = $this->_cacheDir . md5($this->getResourceId()) . '_ontology' . '.owl';
         }
         // Get resource information from the service
-        //$resource = new Service\LkiisResource($this->_resourceId);
+        //$resource = new Service\LkiisResource($this->getResourceId());
         //$resource->getRecords($filename, 100);
       
         // File will be analysed by parts
-        $partSize = 20 *1024 * 1024;        
+        $partSize = 7 *1024 * 1024;        
         if (filesize($filename) > $partSize) {
             
             // Splitting data file
@@ -123,6 +122,21 @@ class LtEnDictionary extends AbstractDictionary
 
         $fileIndividuals = fopen($fileOfIndividuals, "w+");
         $recordNr = 1;
+        /*
+         * Datastructure
+         * Convert the array to lexical entry
+         * array contains
+         * - id
+         * - header
+         * - status
+         * - metadata
+         *      - AntrastinisZodis
+         *      - Reikšme
+         *          - Atitikmuo
+         *          - 0..n Forma
+         *          - Tarimas
+         */
+        $n = array();
         foreach($dom->getElementsByTagName('return') as $domRecord) {
             /* @var $domRecord \DOMElement */
             $nodes = $domRecord->childNodes;
@@ -144,15 +158,12 @@ class LtEnDictionary extends AbstractDictionary
                         if ($el->getAttribute('value') || $el->getAttribute('name') == 'Reiksme') {
                             // Lemma
                             if ($el->getAttribute('name') == 'AntrastinisZodis') {
-                                $ins['lemma'] = $el->getAttribute('value');  
-                            }
-                            // Forms
-                            if ($el->getAttribute('name') == 'Forma') {
-                                $ins['wordForms'][] = $el->getAttribute('value');
-                            }
-                            // Pronunciation
-                            if ($el->getAttribute('name') == 'Tarimas') {
-                                $ins['pronunciation'] = $el->getAttribute('value');
+                                // Bug "patekti į nepatogią padėtį" firs space is nor normal
+                                if ($el->getAttribute('value') == 'patekti į nepatogią padėtį') {
+                                    $ins['lemma'] = 'patekti į nepatogią padėtį';
+                                } else {
+                                    $ins['lemma'] = htmlspecialchars($el->getAttribute('value'));  
+                                }
                             }
 
                             // Senses
@@ -164,15 +175,18 @@ class LtEnDictionary extends AbstractDictionary
                                     // There are some DOMTExt nodes, so we will ignore them
                                     if (get_class($sense) == 'DOMElement') {
                                         /* @var $sense \DOMElement */
-
-                                        // PartOfSpeach
-                                        if ($sense->getAttribute('name') == 'KalbosDalis') {
-                                            $senseArr['partOfSpeach'] = $this->fullAbbreviation($sense->getAttribute('value'));
+                                        // Forms
+                                        if ($sense->getAttribute('name') == 'Forma') {
+                                            $senseArr['wordForms'][] = $sense->getAttribute('value');
+                                        }
+                                        // Pronunciation
+                                        if ($sense->getAttribute('name') == 'Tarimas') {
+                                            $senseArr['pronunciation'] = $sense->getAttribute('value');
                                         }
 
                                         // Equivalents
                                         if ($sense->getAttribute('name') == 'Atitikmuo') {
-                                            $senseArr['equivalent'][] = $sense->getAttribute('value');
+                                            $senseArr['equivalent'][] = htmlspecialchars($sense->getAttribute('value'));
                                         }
                                     }
                                 }
@@ -185,86 +199,44 @@ class LtEnDictionary extends AbstractDictionary
                     $arr[$node->nodeName] = $node->nodeValue;
                 }
             }
-         
+          
             // TODO pridėti tarimą ir wordFormas
-            // Concert the array to lexical entry
+            // Convert the array to lexical entry
             /* array contains
              * - id
              * - header
              * - status
              * - metadata
-             *      - lemma (attr: word)
-             *      - (attr: writer)
-             *      - (attr: imageURL)
-             *      - (attr: sourceLink)
-             *      - (attr: 
-             *      - pronunciation () - TODO
-             *      - wordForms        - TODO
+             *      - lemma
              *      - senses
-             *          - partOfSpeach
+             *          - pronunciation () - TODO
+             *          - wordForms        - TODO fix showing of equivalent forms
              *          - equivalent
              */
-            // B&B symbol exception
             if (isset($arr['metadata']['lemma'])) {
-                $lexicalEntries = array();
+                $senseNr = 1;                
+                $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
+                $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
+                        $arr['metadata']['lemma'], 
+                        $arr['id']));                        
 
-                $senseNr = 1;
-                $isFirst = TRUE;
+                // Set Lemma
+                $lmfLemma = new Owl\LmfLemma();
+                $lmfLemma->setWrittenForm($arr['metadata']['lemma']);
+                $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
+                                $arr['metadata']['lemma'], 
+                                $arr['id']));
+                $lexicalEntry->setLemma($lmfLemma);                
+                
                 foreach ($arr['metadata']['senses'] as $sense) {
                     $lmfSense = new Owl\LmfSense();
-
-                    if ($isFirst) {
-                        $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
-                        $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
-                                $arr['metadata']['lemma'], 
-                                $arr['id']));                        
-                        
-                        // Set Lemma
-                        $lmfLemma = new Owl\LmfLemma();
-                        $lmfLemma->setWrittenForm($arr['metadata']['lemma']);
-                        $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
-                                        $arr['metadata']['lemma'], 
-                                        $arr['id']));
-                        $lexicalEntry->setLemma($lmfLemma);
-
-                        $lexicalEntry->setPartOfSpeech($sense['partOfSpeach']);
-                        array_push($lexicalEntries, $lexicalEntry);                        
-                        $isFirst = FALSE;
-                    } else {
-                        reset($lexicalEntries);
-                        $lexicalEntry = NULL;
-                        // Check if lexical entry with specified part of speech exists
-                        foreach($lexicalEntries as $lexEntry) {
-                            /* @var $lexEntry Owl\LmfLexicalEntry */
-                            if ($lexEntry->getPartOfSpeech() == $sense['partOfSpeach']) {
-                                $lexicalEntry = $lexEntry;
-                            }
-                        }
-                        // Creation of new entity of lexical entry
-                        if (!$lexicalEntry) {
-                            $lexicalEntry = new Owl\LmfLexicalEntry($resourceName);
-                            $lexicalEntry->setUri($this->getUriFactory()->create('LexicalEntry', 
-                                    $arr['metadata']['lemma'] . '-' . (sizeof($lexicalEntries)+1), 
-                                    $arr['id']));                             
-
-                            // Set Lemma
-                            $lmfLemma = new Owl\LmfLemma();
-                            $lmfLemma->setWrittenForm($arr['metadata']['lemma']);
-                            $lmfLemma->setUri($this->getUriFactory()->create('Lemma', 
-                                            $arr['metadata']['lemma'] .  '-' . (sizeof($lexicalEntries)+1), 
-                                            $arr['id']));
-                            $lexicalEntry->setLemma($lmfLemma);
-                        
-                            $lexicalEntry->setPartOfSpeech($sense['partOfSpeach']);
-                            array_push($lexicalEntries, $lexicalEntry);
-                        }
-                    }
+  
                     $lmfSense->setUri($this->getUriFactory()->create('Sense', 
                             $lexicalEntry->getLemma()->getWrittenForm(),
                             $arr['id'] . '-' . $senseNr++));
                     $lmfSense->setLemmaWrittenForm($lexicalEntry->getLemma()->getWrittenForm());
 
-                    $equivalents = $sense['equivalent'];
+                    $equivalents = $sense['equivalent'];                
                     $rank = 1;
                     foreach ($equivalents as $equivalent) {
                         $lmfEquivalent = new Owl\LmfEquivalent();
@@ -280,7 +252,7 @@ class LtEnDictionary extends AbstractDictionary
                      $lexicalEntry->addSense($lmfSense);
                 }
                 // Word form
-                if (!empty($arr['metadata']['wordForms'])) {
+/*                if (!empty($arr['metadata']['wordForms'])) {
                     $rank = 1;
                     foreach ($arr['metadata']['wordForms']  as $wordForm) {
                         $lmfWordForm = new Owl\LmfWordForm();
@@ -291,50 +263,16 @@ class LtEnDictionary extends AbstractDictionary
                         $lexicalEntry->addWordForm($lmfWordForm);
                      }
                 }                
-
-                // When is more than one sense
-                foreach($lexicalEntries as $lexicalEntry) {
-                    fwrite($fileIndividuals, $lexicalEntry->toLmfString());
-                }
+*/
+                fwrite($fileIndividuals, $lexicalEntry->toLmfString());
+                echo '<br />' . $recordNr++ . '-' . $arr['id'] . '-' .  $arr['metadata']['lemma']. "\n";
             }
-            echo '<br />' . $recordNr++ . '-' . $arr['id'] . '-' .  $arr['metadata']['lemma'];
         }
-
         fclose($fileIndividuals);
-    }
-
-    private function fullAbbreviation($abbr)
-    {
-        // From http://members.peak.org/~jeremy/dictionaryclassic/chapters/abbreviations.php
-        $map = array (
-            'a'    => 'adjective ',   // my quess by Alkonas
-            'abbr' => 'abbreviation',
-            'acr'  => 'acronym',
-            'adj'  => 'adjective',
-            'adv'  => 'adverb',
-            'art'  => 'article', // my quess
-            'comb' => 'prefix',   // my quess
-            'conj' => 'conjunction',
-            'int'  => 'interjection', // my quess by Alkonas
-            'intj' => 'interjection',
-            'n'    => 'noun',
-            'num'  => 'numeral', // my quess by Alkonas. According to source it should be a number
-            'part' => 'particle', // my quess by Alkonas
-            'prep' => 'preposition',
-            'pref' => 'prefix',
-            'pron' => 'pronoun',
-            'v'    => 'verb',
-            // Free part of speech
-            'num card' => 'cardinal (numeral)', //my quess by Alkonas
-            'phrase'   => 'phrase',
-            'prefix'   => 'prefix',
-        );
-        if (isset($map[$abbr])) {
-            return $map[$abbr];
-        } else {
-            echo "Not mapped abbreviation " . $abbr;
-            return $abbr;
-        }
+        
+        if (!empty($n)) {
+            print_r($n);
+        }        
     }
     
     private function createOwl($fileOfIndividuals, $resourceOwlFile)
@@ -386,7 +324,11 @@ class LtEnDictionary extends AbstractDictionary
         fwrite($fileResourceOwl, $resourceAnnotationStr);
         fclose($fileResourceOwl);
         
-        // xml validations
+        // ontology validation
+        $file = fopen($resourceOwlFile, 'r');
+        $xml = fread($file, filesize($resourceOwlFile));
+        fclose($file);
+
         try {
             $dom = new \DOMDocument('1.0', 'UTF-8');
             $dom->loadXML($xml);
