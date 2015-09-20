@@ -26,11 +26,11 @@ class LkiSecondCard extends LkiMainCard
      */
     public function __construct() {
         $this->setResourceId('LKIKartoteka/2');
-        $this->setResourceName('Papildymų kartoteka');
+        $this->setResourceName('LKŽ papildymų kartoteka');
         
         /** @var Uri\AbstractUri $uriFactory */
         $uriFactory = new Owl\Uri\UriFactory();
-        $uriFactory->setUriBase('&lmf;kartoteka.Papildymų_kartoteka');
+        $uriFactory->setUriBase('&lmf;zodynas.LKŽ_papildymų_kartoteka');
         
         $this->setUriFactory($uriFactory);
     }
@@ -58,7 +58,7 @@ class LkiSecondCard extends LkiMainCard
         // Build individal for LMF ontology
         // LKISecond car file is very big so we split it it to parts
         // Part size 50 MB
-        $partSize = 20 *1024 * 1024;        
+        $partSize = 25 *1024 * 1024;        
         if (filesize($filename) > $partSize) {
             
             // Splitting data file
@@ -96,7 +96,7 @@ class LkiSecondCard extends LkiMainCard
                 $content = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:getRecordsResponse xmlns:ns2="http://servicebus.lki/">'
                         . $content;
             } 
-            
+           
             // Building of individuals and OWL
             for ($i = 1 ; $i <= $parts; $i++) {
                 $partFileName = $filename . '_part_' . $i . '.txt';
