@@ -11,7 +11,7 @@ use Rastija\Owl\Uri;
 use Rastija\Service;
 
 /**
- * Description of LltiRiddleCard
+ * Description of LKI Phraselogical dictionary
  *
  * @author Virginijus
  */

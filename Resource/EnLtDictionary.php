@@ -11,7 +11,7 @@ use Rastija\Owl;
 use Rastija\Service;
 
 /**
- * Description of LtEnDictionary
+ * Description of English lithuanian dictionary
  *
  * @author Virginijus
  */
