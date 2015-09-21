@@ -7,7 +7,6 @@
  */
 
 namespace Rastija\Owl;
-use Rastija\Owl\Uri\AbstractUri;
 use Rastija\Owl\LmfDefinition;
 
 /**
@@ -37,11 +36,26 @@ class LmfSense extends AbstractLmfClass
     
     /**
      * LMF definition that is related to this sense
-     *
+     * 
      * @var \Rastija\Owl\LmfDefinition
      */
     private $definition;
     
+    /**
+     * Store LMF sense relations.
+     * (object property hasSenseRelation_
+     * 
+     * @var array of \Rastija\Owl\LmfSenseRelation
+     */
+    private $senseRelations = array();
+    
+    /**
+     * Store LMF sense examples
+     * (objext property hasSenseExample)
+     * 
+     * @var array of \Rastija\Owl\LmfSenseExample 
+     */
+    private $senseExamples = array();
     
     /* ------------------------ Not LMF ontology parameters ------------------*/
     /**
@@ -92,6 +106,24 @@ class LmfSense extends AbstractLmfClass
         $this->definition = $definition;
     }
 
+    /**
+     * Add SenseRelation (hasSenseRelation)
+     * 
+     * @param \Rastija\Owl\LmfSenseRelation $senseRelation
+     */
+    public function addSenseRelation(LmfSenseRelation $senseRelation) {
+        array_push($this->senseRelations, $senseRelation);
+    }        
+    
+    /**
+     * Add SenseExample (hasSenseExample)
+     * 
+     * @param \Rastija\Owl\LmfSenseExample $senseExample
+     */
+    public function addSenseExample(LmfSenseExample $senseExample) {
+        array_push($this->senseExamples, $senseExample);
+    }
+    
     public function toLmfString() {
         /*        
         <owl:NamedIndividual rdf:about="&lmf;Anglų-lietuvių-kalbų-kompiuterijos-žodynas/sign-60egg58hge90c141a55be26aa-sense"> 
@@ -102,16 +134,24 @@ class LmfSense extends AbstractLmfClass
          */
         $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri()}\">\n";
         $str .= "\t<rank>{$this->getRank()}</rank>\n";
-        $str .= "\t<rdfs:label>{$this->getLemmaWrittenForm()}-Sense</rdfs:label>\n";
-        
+
         foreach ($this->equivalents as $equivalent) {
             $str .= "\t<hasEquivalent rdf:resource=\"{$equivalent->getUri() }\"/>\n";
         }
-        
+
         if ($this->getDefinition()) {
             $str .= "\t<hasDefinition rdf:resource=\"{$this->getDefinition()->getUri() }\"/>\n";
         }
+
+        foreach ($this->senseRelations as $senseRelation) {
+            $str .= "\t<hasSenseRelation rdf:resource=\"{$senseRelation->getUri() }\"/>\n";
+        }
+
+        foreach ($this->senseExamples as $senseExample) {
+            $str .= "\t<hasSenseExample rdf:resource=\"{$senseExample->getUri() }\"/>\n";
+        }
         
+        $str .= "\t<rdfs:label>{$this->getLemmaWrittenForm()}-Sense</rdfs:label>\n";        
         $str .= "\t<rdf:type rdf:resource=\"&lmf;Sense\"/>\n";
         $str .= "</owl:NamedIndividual>\n";
         
@@ -124,6 +164,16 @@ class LmfSense extends AbstractLmfClass
         // Definition
         if ($this->getDefinition()) {
             $str .= $this->getDefinition()->toLmfString();
+        }
+        
+        // SenseRelations
+        foreach ($this->senseRelations as $senseRelation) {
+            $str .= $senseRelation->toLmfString();
+        }
+
+        // SenseExamples
+        foreach ($this->senseExamples as $senseExample) {
+            $str .= $senseExample->toLmfString();
         }
         
         return $str;
