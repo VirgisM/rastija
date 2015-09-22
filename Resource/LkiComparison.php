@@ -179,7 +179,7 @@ class LkiComparison extends AbstractDictionary
                                 }
                             }
                             
-                            // Idioms
+                            // Comparitions
                             if ($el->getAttribute('name') == 'comp') {
                                 $compsArr = array('comp' => $el->getAttribute('value'));
                                 $compsArr['comps'] = array();
@@ -248,16 +248,15 @@ class LkiComparison extends AbstractDictionary
                 
                 $writtenForm = "<![CDATA[";
                 foreach ($arr['metadata']['comps'] as $key => $attr) {
-                    //$writtenForm .= "<div>";
                     if (isset($attr['comp'])) {                     
                         $writtenForm .= "\n<br/><span style=\"font-weight: bold;\">{$attr['comp']}</span> ";
                         
-                        // IdiomTag
+                        // CompTag
                         if (isset($attr['comptag'])) {
                             $writtenForm .= implode('., ', $attr['comptag']) .  ". ";
                         }
                       
-                        // Explanation
+                        // Comparitions
                         if (isset($attr['comps'])) {
                             $countExpl = count($attr['comps']);
                                 
@@ -291,7 +290,6 @@ class LkiComparison extends AbstractDictionary
                             }
                         }                     
                     }
-                    //$writtenForm .= "</div>";
                 }
                 
                 $writtenForm .= "]]>";
