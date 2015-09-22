@@ -60,7 +60,7 @@ class LmfSenseRelation extends AbstractLmfClass
      * @param \Rastija\Owl\LmfLexicalEntry $lmfLexicalEntry
      */
     public function addSenseRelatedTo(LmfLexicalEntry $lmfLexicalEntry) {
-        array_push($this->relatedTo, $lmfLexicalEntry);
+        array_push($this->senseRelatedTo, $lmfLexicalEntry);
     }
 
     public function toLmfString() {
