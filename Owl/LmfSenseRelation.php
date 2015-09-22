@@ -35,6 +35,13 @@ class LmfSenseRelation extends AbstractLmfClass
      */
     private $rank;
     
+    /**
+     * Dublicate senseRelatedTo when there is no such Lexical Entry
+     * 
+     * @var string
+     */
+    private $writtenForm;
+    
     public function getType() {
         return $this->type;
     }
@@ -53,6 +60,13 @@ class LmfSenseRelation extends AbstractLmfClass
 
     public function setRank($rank) {
         $this->rank = $rank;
+    }
+    public function getWrittenForm() {
+        return $this->writtenForm;
+    }
+
+    public function setWrittenForm($writtenForm) {
+        $this->writtenForm = $writtenForm;
     }
 
     /**
@@ -81,6 +95,10 @@ class LmfSenseRelation extends AbstractLmfClass
 
         if ($this->getRank()) {
             $str .= "\t<rank>{$this->getRank()}</rank>\n";
+        }
+
+        if ($this->getWrittenForm()) {
+            $str .= "\t<writtenForm>{$this->getWrittenForm()}</writtenForm>\n";
         }
         
         foreach ($this->senseRelatedTo as $lmfLexicalEntry) {
