@@ -29,6 +29,12 @@ class LmfSenseRelation extends AbstractLmfClass
      */
     private $type;
     
+    /**
+     * Order of sense realation
+     * @var string 
+     */
+    private $rank;
+    
     public function getType() {
         return $this->type;
     }
@@ -41,6 +47,14 @@ class LmfSenseRelation extends AbstractLmfClass
         return $this->relatedTo;
     }
 
+    public function getRank() {
+        return $this->rank;
+    }
+
+    public function setRank($rank) {
+        $this->rank = $rank;
+    }
+
     /**
      * It represent realation senseRelatedTo 
      * @param \Rastija\Owl\LmfLexicalEntry $lmfLexicalEntry
@@ -48,7 +62,6 @@ class LmfSenseRelation extends AbstractLmfClass
     public function addSenseRelatedTo(LmfLexicalEntry $lmfLexicalEntry) {
         array_push($this->relatedTo, $lmfLexicalEntry);
     }
-
 
     public function toLmfString() {
         /*
@@ -63,7 +76,11 @@ class LmfSenseRelation extends AbstractLmfClass
          */
         $str = "<owl:NamedIndividual rdf:about=\"{$this->getUri()}\">\n";
         if ($this->getType()) {
-            $str .= "\t<&lmf;type>{$this->getType()}</&lmf;type>\n";
+            $str .= "\t<lmf:type>{$this->getType()}</lmf:type>\n";
+        }
+
+        if ($this->getRank()) {
+            $str .= "\t<rank>{$this->getRank()}</rank>\n";
         }
         
         foreach ($this->senseRelatedTo as $lmfLexicalEntry) {
