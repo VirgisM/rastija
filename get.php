@@ -21,6 +21,8 @@ require_once( dirname( __FILE__ ) . '/Owl/LmfLexicalEntry.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfLemma.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfWordForm.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfSense.php');
+require_once( dirname( __FILE__ ) . '/Owl/LmfSenseRelation.php');
+require_once( dirname( __FILE__ ) . '/Owl/LmfSenseExample.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfEquivalent.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfTextRepresentation.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfDefinition.php');
@@ -36,6 +38,10 @@ require_once( dirname( __FILE__ ) . '/Resource/LkiPhraseological.php');
 require_once( dirname( __FILE__ ) . '/Resource/LtEnDictionary.php');
 require_once( dirname( __FILE__ ) . '/Resource/LatLtDictionary.php');
 require_once( dirname( __FILE__ ) . '/Resource/GrLtDictionary.php');
+require_once( dirname( __FILE__ ) . '/Resource/LkiComparison.php');
+require_once( dirname( __FILE__ ) . '/Resource/LkiClassified.php');
+require_once( dirname( __FILE__ ) . '/Resource/LkiAntonym.php');
+require_once( dirname( __FILE__ ) . '/Resource/LkiSurname.php');
 
 // Maximum memory with is allowed by php
 ini_set('memory_limit', '1048M');
@@ -70,8 +76,8 @@ ini_set('upload_max_filesize', '1024M');
 //echo $lkiisClient->getResources();
 
 /* Frazeologijos žodynas 3311 įrašai*/
-$dic = new Resource\LkiPhraseological();
-echo $dic->generateLmfOwl();
+//$dic = new Resource\LkiPhraseological();
+//echo $dic->generateLmfOwl();
 
 /* Lietuvių anglų žodynas  78874 įrašai*/
 //$dic = new Resource\LtEnDictionary();
@@ -83,4 +89,20 @@ echo $dic->generateLmfOwl();
 
 /* Senovės graikų Lietuvių anglų žodynas 22803 įrašai*/
 //$dic = new Resource\GrLtDictionary();
+//echo $dic->generateLmfOwl();
+
+/* Palyginimų žodynas 7093 įrašai, o realiai 7092*/
+//$dic = new Resource\LkiComparison();
+//echo $dic->generateLmfOwl();
+
+/* Sisteminis lietuvių kalbos žodynas 1614 įrašai (viskas sudėta i 1), o realiai xxx */
+$dic = new Resource\LkiClassified();
+echo $dic->generateLmfOwl();
+
+/* Antonimų žodynas 5401 įrašai, o realiai 4243 */
+//$dic = new Resource\LkiAntonym();
+//echo $dic->generateLmfOwl();
+
+/* Antonimų žodynas 47122 įrašai, o realiai xxx */
+//$dic = new Resource\LkiSurname();
 //echo $dic->generateLmfOwl();

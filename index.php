@@ -3,14 +3,15 @@ namespace Rastija;
 use Rastija\Service;
 use Rastija\Owl;
 
+
+die();
+
 require_once( dirname( __FILE__ ) . '/Service/SearchServices.class.php' );
 require_once( dirname( __FILE__ ) . '/Service/LkiisSoapClient.php');
 require_once( dirname( __FILE__ ) . '/Service/LkiisResource.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfLexicalEntry.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfSense.php');
 require_once( dirname( __FILE__ ) . '/Owl/LmfEquivalent.php');
-
-
 
 $lkiisClient = new Service\LkiisSoapClient();
 //$lkiisClient->getRecords('LKIKartoteka/1', '2013-04-25T10:02:39.953Z', '2015-08-17', 1, 10);

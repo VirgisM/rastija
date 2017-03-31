@@ -1,0 +1,1067 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.w3.org/2002/07/owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <Ontology rdf:about="http://www.rastija.lt/isteklius"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#AdditionalResource -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#AdditionalResource">
+        <rdfs:label>Papildomas išteklius</rdfs:label>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#AdditionalResourceDescription -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#AdditionalResourceDescription">
+        <rdfs:label>Papildomo išteklio aprašymas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#IsteklioAprasymas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#AdditionalResourceLink -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#AdditionalResourceLink">
+        <rdfs:label>Papildomo išteklio nuoroda</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#URL"/>
+                <someValuesFrom rdf:resource="&xsd;anyURI"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#AdditionalResourceName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#AdditionalResourceName">
+        <rdfs:label>Papildomo išteklio pavdinimas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#Pavadinimas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#AdditionalResourceType -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#AdditionalResourceType">
+        <rdfs:label>Papildomo išteklio tipas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#AdditionalResource"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#PapildomoIsteklioTipas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Anotation -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Anotation">
+        <rdfs:label>Anotacija</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#AnotationType -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#AnotationType">
+        <rdfs:label>Anotacijos tipas</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Anotator -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Anotator">
+        <rdfs:label>Anotatorius</rdfs:label>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#AuthorIs -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#AuthorIs">
+        <rdfs:label>Parengė</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#CorpusType -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#CorpusType">
+        <rdfs:label>Rinkinio tipas</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Corpora"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Description -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Description">
+        <rdfs:label>Paantraštiniai duomenys</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#EditorOrganization -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#EditorOrganization">
+        <rdfs:label>Redaktorius organizacija</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <inverseOf rdf:resource="http://www.rastija.lt/isteklius#IsEditor"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#EditorPerson -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#EditorPerson">
+        <rdfs:label>Redaktorius asmuo</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Funder -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Funder">
+        <rdfs:label>Finansuotojas</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#LanguageDescription -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#LanguageDescription">
+        <rdfs:label>Kalbos gramatika</rdfs:label>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#LexiconType -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#LexiconType">
+        <rdfs:label>Žodyno tipas</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Lexicon"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Licence -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Licence">
+        <rdfs:label>Licencija</rdfs:label>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#LicenceType -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#LicenceType">
+        <rdfs:label>Licencijos tipas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Licensor -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Licensor">
+        <rdfs:label>Licencijos platintojas</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Organization -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Organization">
+        <rdfs:label>Organizacija</rdfs:label>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#OrganizationName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#OrganizationName">
+        <rdfs:label>Organizacijos pavadinimas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#OrganizacijosPavadinimas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#OrganizationShortName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#OrganizationShortName">
+        <rdfs:label>Orgaizacijos trumpas pavadinimas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#OrganiacijosTrumasPavadinimas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Person -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Person">
+        <rdfs:label>Asmuo</rdfs:label>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Price -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Price">
+        <rdfs:label>Kaina</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Project -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Project">
+        <rdfs:label>Projektas</rdfs:label>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ProjectEndDate -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ProjectEndDate">
+        <rdfs:label>Projekto pabaiga</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ProjectName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ProjectName">
+        <rdfs:label>Projekto pavadinimas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ProjectShortName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ProjectShortName">
+        <rdfs:label>Projekto trumas pavadinimas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ProjectStartDate -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ProjectStartDate">
+        <rdfs:label>Projekto pradžia</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Properties -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Properties"/>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PublisherOrganization -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PublisherOrganization">
+        <rdfs:label>Leidėjas organizacija</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <inverseOf rdf:resource="http://www.rastija.lt/isteklius#IsPublisher"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PublisherPerson -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PublisherPerson">
+        <rdfs:label>Leidėjas asmuo</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PublishingInfo -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PublishingInfo">
+        <rdfs:label>Laidos duomenys</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PublishingPlace -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PublishingPlace">
+        <rdfs:label>Leidimo vieta</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Resource -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Resource">
+        <rdfs:label>Išteklius</rdfs:label>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ResourseType -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ResourseType">
+        <rdfs:label>Išteklio tipas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ServiceTools -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ServiceTools">
+        <rdfs:label>Įrankiai priemonės</rdfs:label>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ShortName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ShortName">
+        <rdfs:label>Trumpas pavadinimas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Type -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Type">
+        <rdfs:label>Tipas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#LanguageDescription"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#ServiceTools"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#LanguageDescription"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#ToolsService"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#URL -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#URL">
+        <rdfs:label>URL</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#UserNature -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#UserNature">
+        <rdfs:label>Naudotojas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#Naudotojas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#WorkAt -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#WorkAt">
+        <rdfs:label>Dirba</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Position"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#hasAdditionalResource -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#hasAdditionalResource">
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Properties"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#hasAnotator -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#hasAnotator">
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Properties"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Position"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#hasLanguage -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#hasLanguage">
+        <rdfs:label>Susidada iš</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Properties"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Language"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#hasLicence -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#hasLicence">
+        <rdfs:label>Turi</rdfs:label>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Licence"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Properties"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#hasOrganization -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#hasOrganization">
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Properties"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#hasPerson -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#hasPerson">
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Properties"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#hasProject -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#hasProject">
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Project"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Properties"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Author -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Author">
+        <rdfs:label>Autorius</rdfs:label>
+        <inverseOf rdf:resource="http://www.rastija.lt/isteklius#AuthorIs"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#IsEditor -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#IsEditor">
+        <rdfs:label>Juridinis redaktorius</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#IsPublisher -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#IsPublisher">
+        <rdfs:label>Juridinis leidėjas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#OrganizationEmail -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#OrganizationEmail">
+        <rdfs:label>Organizacijos el. paštas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#Elpastas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PersonEmail -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PersonEmail">
+        <rdfs:label>Asmens el. paštas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#Elpastas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PersonIsEditor -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PersonIsEditor">
+        <rdfs:label>Fizinis redaktorius</rdfs:label>
+        <inverseOf rdf:resource="http://www.rastija.lt/isteklius#EditorPerson"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PersonIsPublisher -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PersonIsPublisher">
+        <rdfs:label>Fizinis leidėjas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <inverseOf rdf:resource="http://www.rastija.lt/isteklius#PublisherPerson"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PersonLastName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PersonLastName">
+        <rdfs:label>Asmens pavardė</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#Pavarde"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PersonName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PersonName">
+        <rdfs:label>Asmens vardas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#Vardas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PersonPosition -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#PersonPosition">
+        <rdfs:label>Asmens pareigos</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <inverseOf rdf:resource="http://www.rastija.lt/isteklius#WorkAt"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Position"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ResourseLanguage -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ResourseLanguage">
+        <rdfs:label>Išteklio kalba</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Language"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ResourseName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ResourseName">
+        <rdfs:label>Išteklio pavadinimas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#IstekioPavadinimas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ResourseShortName -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#ResourseShortName">
+        <rdfs:label>Išteklio trumpas pavadinimas</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#IsteklioTrumpasPavadinimas"/>
+                <someValuesFrom rdf:resource="&xsd;string"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#URL -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#URL">
+        <rdfs:label>URL</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#URL"/>
+                <someValuesFrom rdf:resource="&xsd;anyURI"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#User -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#User">
+        <rdfs:label>Kontaktinis asmuo</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Organization"/>
+        <rdfs:range rdf:resource="http://www.rastija.lt/isteklius#Person"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Year -->
+
+    <ObjectProperty rdf:about="http://www.rastija.lt/isteklius#Year">
+        <rdfs:label>Leidimo metai</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:domain rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:range>
+            <Restriction>
+                <onProperty rdf:resource="http://www.rastija.lt/isteklius#IsleidimoData"/>
+                <someValuesFrom rdf:resource="&xsd;dateTime"/>
+            </Restriction>
+        </rdfs:range>
+    </ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Aprasymas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Aprasymas">
+        <rdfs:label>Aprašymas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#IsteklioAprasymas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#IsteklioAprasymas">
+        <rdfs:label>Išteklio aprašymas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Naudotojas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Naudotojas"/>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#OrganiacijosTrumasPavadinimas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#OrganiacijosTrumasPavadinimas">
+        <rdfs:label>Organiacijos trumas pavadinimas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PapildomoIsteklioTipas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#PapildomoIsteklioTipas"/>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Pavadinimas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Pavadinimas"/>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ZodynoAprasymas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#ZodynoAprasymas">
+        <rdfs:label>Žodyno aprašymas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ZodynoPavadinimas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#ZodynoPavadinimas">
+        <rdfs:label>Žodyno_pavadinimas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ZodynoTipas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#ZodynoTipas"/>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ZodynoTrumpasAprasymas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#ZodynoTrumpasAprasymas">
+        <rdfs:label>Žodyno trumpas aprašymas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Elpastas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Elpastas">
+        <rdfs:label>El. paštas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#IsleidimoData -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#IsleidimoData">
+        <rdfs:label>Išleidimo data</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#IstekioPavadinimas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#IstekioPavadinimas">
+        <rdfs:label>Ištekio pavadinimas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#IsteklioTrumpasPavadinimas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#IsteklioTrumpasPavadinimas"/>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Kalba -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Kalba"/>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Leidimas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Leidimas">
+        <rdfs:label>Leidimas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Metai -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Metai">
+        <rdfs:label>Metai</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="&owl;topDataProperty"/>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#OrganizacijosPavadinimas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#OrganizacijosPavadinimas">
+        <rdfs:label>Organiacijos pavadinimas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#PadalinioPavadinimas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#PadalinioPavadinimas">
+        <rdfs:label>Padalinio pavadinimas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Pareigos -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Pareigos"/>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Pavarde -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Pavarde">
+        <rdfs:label>Pavardė</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#URL -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#URL">
+        <rdfs:label>URL</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Vardas -->
+
+    <DatatypeProperty rdf:about="http://www.rastija.lt/isteklius#Vardas">
+        <rdfs:label>Vardas</rdfs:label>
+    </DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Licence -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Licence">
+        <rdfs:label>Licencija</rdfs:label>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Project -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Project">
+        <rdfs:label>Projektas</rdfs:label>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#AdditionalResource -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#AdditionalResource">
+        <rdfs:label rdf:datatype="&xsd;string">Papildomas išteklius</rdfs:label>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Corpora -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Corpora">
+        <rdfs:label rdf:datatype="&xsd;string">Rinkinys (corpus)</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Language -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Language">
+        <rdfs:label rdf:datatype="&xsd;string">Kalba</rdfs:label>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#LanguageDescription -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#LanguageDescription">
+        <rdfs:label>Kalbos gramatika</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+        <rdfs:comment>Kalbos grematikos aiskinimas
+metodinės priemonės
+</rdfs:comment>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Lexicon -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Lexicon">
+        <rdfs:label rdf:datatype="&xsd;string">Žodynas (lexical)</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Organization -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Organization">
+        <rdfs:label rdf:datatype="&xsd;string">Organizacija</rdfs:label>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Person -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Person">
+        <rdfs:label rdf:datatype="&xsd;string">Asmuo</rdfs:label>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Position -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Position">
+        <rdfs:label rdf:datatype="&xsd;string">Pareigos</rdfs:label>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#Resource -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#Resource">
+        <rdfs:label rdf:datatype="&xsd;string">Išteklius</rdfs:label>
+    </Class>
+    
+
+
+    <!-- http://www.rastija.lt/isteklius#ToolsService -->
+
+    <Class rdf:about="http://www.rastija.lt/isteklius#ToolsService">
+        <rdfs:label>Įrankiai ir priemonės</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.rastija.lt/isteklius#Resource"/>
+    </Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+
